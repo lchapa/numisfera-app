@@ -18,8 +18,8 @@ Este plan detalla las fases y tareas para construir la funcionalidad del catálo
 
 - [x] **Task:** Escribir pruebas unitarias para el `CoinService` que verifiquen la lógica de negocio. cf36f99
 - [x] **Task:** Implementar el `CoinService` para obtener todas las monedas y una moneda por ID. cf36f99
-- [ ] **Task:** Escribir pruebas de integración para el `CoinController`.
-- [ ] **Task:** Implementar el `CoinController` para exponer los endpoints `GET /api/coins` y `GET /api/coins/{id}`.
+- [x] **Task:** Escribir pruebas de integración para el `CoinController`. e29d34c
+- [x] **Task:** Implementar el `CoinController` para exponer los endpoints `GET /api/coins` y `GET /api/coins/{id}`. e29d34c
 - [ ] **Task:** Conductor - User Manual Verification 'Fase 2: Desarrollo de la API REST' (Protocol in workflow.md)
 
 ---
