@@ -20,13 +20,13 @@ Este plan detalla las fases y tareas para construir la funcionalidad del catálo
 - [x] **Task:** Implementar el `CoinService` para obtener todas las monedas y una moneda por ID. cf36f99
 - [x] **Task:** Escribir pruebas de integración para el `CoinController`. e29d34c
 - [x] **Task:** Implementar el `CoinController` para exponer los endpoints `GET /api/coins` y `GET /api/coins/{id}`. e29d34c
-- [ ] **Task:** Conductor - User Manual Verification 'Fase 2: Desarrollo de la API REST' (Protocol in workflow.md)
+- [x] **Task:** Conductor - User Manual Verification 'Fase 2: Desarrollo de la API REST' (Protocol in workflow.md)
 
 ---
 
 ### Fase 3: Configuración del Frontend
 
-- [ ] **Task:** Inicializar el proyecto de React usando `create-react-app` o una herramienta similar.
+- [~] **Task:** Inicializar el proyecto de React usando `create-react-app` o una herramienta similar.
 - [ ] **Task:** Estructurar las carpetas del proyecto (components, pages, services, styles).
 - [ ] **Task:** Implementar el layout principal de la aplicación (Header, Footer, área de contenido) y el enrutamiento básico (React Router).
 - [ ] **Task:** Conductor - User Manual Verification 'Fase 3: Configuración del Frontend' (Protocol in workflow.md)
