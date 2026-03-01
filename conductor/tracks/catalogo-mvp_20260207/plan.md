@@ -10,13 +10,13 @@ Este plan detalla las fases y tareas para construir la funcionalidad del catálo
 - [x] **Task:** Definir la entidad JPA `@Entity` para el modelo `Coin` en Java. cad3be4
 - [x] **Task:** Crear la interfaz `CoinRepository` que extiende de `JpaRepository`. 330de5c
 - [x] **Task:** Implementar un servicio de carga de datos inicial (Data Seeder) para poblar la base de datos con algunas monedas de ejemplo. 6c4441d
-- [ ] **Task:** Conductor - User Manual Verification 'Fase 1: Configuración del Backend y Modelo de Datos' (Protocol in workflow.md)
+- [x] **Task:** Conductor - User Manual Verification 'Fase 1: Configuración del Backend y Modelo de Datos' (Protocol in workflow.md)
 
 ---
 
 ### Fase 2: Desarrollo de la API REST
 
-- [ ] **Task:** Escribir pruebas unitarias para el `CoinService` que verifiquen la lógica de negocio.
+- [~] **Task:** Escribir pruebas unitarias para el `CoinService` que verifiquen la lógica de negocio.
 - [ ] **Task:** Implementar el `CoinService` para obtener todas las monedas y una moneda por ID.
 - [ ] **Task:** Escribir pruebas de integración para el `CoinController`.
 - [ ] **Task:** Implementar el `CoinController` para exponer los endpoints `GET /api/coins` y `GET /api/coins/{id}`.
