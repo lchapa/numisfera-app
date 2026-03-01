@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 @RestController
 @RequestMapping("/api/coins")
+@CrossOrigin(origins = "http://localhost:5173")
 public class CoinController {
 
     private final CoinService coinService;
