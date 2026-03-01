@@ -26,8 +26,8 @@ Este plan detalla las fases y tareas para construir la funcionalidad del catálo
 
 ### Fase 3: Configuración del Frontend
 
-- [~] **Task:** Inicializar el proyecto de React usando `create-react-app` o una herramienta similar.
-- [ ] **Task:** Estructurar las carpetas del proyecto (components, pages, services, styles).
+- [x] **Task:** Inicializar el proyecto de React usando `create-react-app` o una herramienta similar. c965b5e
+- [~] **Task:** Estructurar las carpetas del proyecto (components, pages, services, styles).
 - [ ] **Task:** Implementar el layout principal de la aplicación (Header, Footer, área de contenido) y el enrutamiento básico (React Router).
 - [ ] **Task:** Conductor - User Manual Verification 'Fase 3: Configuración del Frontend' (Protocol in workflow.md)
 
