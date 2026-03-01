@@ -1,0 +1,8 @@
+{
+  "track_id": "catalogo-mvp_20260207",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-02-07T12:00:00Z",
+  "updated_at": "2026-02-07T12:00:00Z",
+  "description": "Construir el catálogo de exhibición principal, incluyendo la estructura de datos de las monedas, la API para consultarlas y la interfaz de usuario para visualizarlas con filtros de búsqueda."
+}
