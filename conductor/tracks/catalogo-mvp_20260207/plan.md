@@ -29,13 +29,13 @@ Este plan detalla las fases y tareas para construir la funcionalidad del catálo
 - [x] **Task:** Inicializar el proyecto de React usando `create-react-app` o una herramienta similar. c965b5e
 - [x] **Task:** Estructurar las carpetas del proyecto (components, pages, services, styles). cd4d14c
 - [x] **Task:** Implementar el layout principal de la aplicación (Header, Footer, área de contenido) y el enrutamiento básico (React Router). c3a7363
-- [ ] **Task:** Conductor - User Manual Verification 'Fase 3: Configuración del Frontend' (Protocol in workflow.md)
+- [x] **Task:** Conductor - User Manual Verification 'Fase 3: Configuración del Frontend' (Protocol in workflow.md)
 
 ---
 
 ### Fase 4: Implementación de la Interfaz de Usuario
 
-- [ ] **Task:** Crear un `apiService` en el frontend para comunicarse con la API del backend.
+- [~] **Task:** Crear un `apiService` en el frontend para comunicarse con la API del backend.
 - [ ] **Task:** Crear un componente `CoinCard` para mostrar la vista previa de una moneda.
 - [ ] **Task:** Crear la página `CatalogPage` que consume el `apiService`, muestra una cuadrícula de `CoinCard`s y contiene los controles de filtro.
 - [ ] **Task:** Crear la página `DetailPage` que muestra la información completa de una moneda.
