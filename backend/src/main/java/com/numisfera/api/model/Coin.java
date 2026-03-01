@@ -22,7 +22,7 @@ public class Coin {
     @Column(nullable = false)
     private String country;
 
-    @Column(nullable = false)
+    @Column(name = "issue_year", nullable = false)
     private Integer year;
 
     @Column
