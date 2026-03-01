@@ -6,7 +6,7 @@ Este plan detalla las fases y tareas para construir la funcionalidad del catálo
 
 ### Fase 1: Configuración del Backend y Modelo de Datos
 
-- [ ] **Task:** Inicializar el proyecto Spring Boot con las dependencias necesarias (Spring Web, Spring Data JPA, MySQL Driver).
+- [x] **Task:** Inicializar el proyecto Spring Boot con las dependencias necesarias (Spring Web, Spring Data JPA, MySQL Driver). eec4bf3
 - [ ] **Task:** Definir la entidad JPA `@Entity` para el modelo `Coin` en Java.
 - [ ] **Task:** Crear la interfaz `CoinRepository` que extiende de `JpaRepository`.
 - [ ] **Task:** Implementar un servicio de carga de datos inicial (Data Seeder) para poblar la base de datos con algunas monedas de ejemplo.
