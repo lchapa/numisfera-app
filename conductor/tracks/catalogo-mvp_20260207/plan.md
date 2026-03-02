@@ -36,8 +36,8 @@ Este plan detalla las fases y tareas para construir la funcionalidad del catálo
 ### Fase 4: Implementación de la Interfaz de Usuario
 
 - [x] **Task:** Crear un `apiService` en el frontend para comunicarse con la API del backend. 63d42ab
-- [~] **Task:** Crear un componente `CoinCard` para mostrar la vista previa de una moneda.
-- [ ] **Task:** Crear la página `CatalogPage` que consume el `apiService`, muestra una cuadrícula de `CoinCard`s y contiene los controles de filtro.
+- [x] **Task:** Crear un componente `CoinCard` para mostrar la vista previa de una moneda. fca582e
+- [~] **Task:** Crear la página `CatalogPage` que consume el `apiService`, muestra una cuadrícula de `CoinCard`s y contiene los controles de filtro.
 - [ ] **Task:** Crear la página `DetailPage` que muestra la información completa de una moneda.
 - [ ] **Task:** Implementar la navegación entre la página de catálogo y la de detalle.
 - [ ] **Task:** Conductor - User Manual Verification 'Fase 4: Implementación de la Interfaz de Usuario' (Protocol in workflow.md)
