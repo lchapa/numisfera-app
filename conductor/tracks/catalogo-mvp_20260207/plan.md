@@ -40,4 +40,4 @@ Este plan detalla las fases y tareas para construir la funcionalidad del catálo
 - [x] **Task:** Crear la página `CatalogPage` que consume el `apiService`, muestra una cuadrícula de `CoinCard`s y contiene los controles de filtro. c76ffe5
 - [x] **Task:** Crear la página `DetailPage` que muestra la información completa de una moneda. ca40417
 - [x] **Task:** Implementar la navegación entre la página de catálogo y la de detalle. ca40417
-- [~] **Task:** Conductor - User Manual Verification 'Fase 4: Implementación de la Interfaz de Usuario' (Protocol in workflow.md)
+- [x] **Task:** Conductor - User Manual Verification 'Fase 4: Implementación de la Interfaz de Usuario' (Protocol in workflow.md)
