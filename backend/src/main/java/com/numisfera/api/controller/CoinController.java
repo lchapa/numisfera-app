@@ -1,34 +1,50 @@
 package com.numisfera.api.controller;
 
 import com.numisfera.api.model.Coin;
+import com.numisfera.api.model.Role;
+import com.numisfera.api.model.User;
+import com.numisfera.api.repository.UserRepository;
+import com.numisfera.api.security.services.UserDetailsImpl;
 import com.numisfera.api.service.CoinService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-
 @RestController
 @RequestMapping("/api/coins")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class CoinController {
 
     private final CoinService coinService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public CoinController(CoinService coinService) {
+    public CoinController(CoinService coinService, UserRepository userRepository) {
         this.coinService = coinService;
+        this.userRepository = userRepository;
+    }
+
+    private User getAuthenticatedUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getPrincipal() instanceof UserDetailsImpl) {
+            UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+            return userRepository.findById(userDetails.getId()).orElse(null);
+        }
+        return null;
+    }
+
+    private boolean isOwnerOrAdmin(User user, Coin coin) {
+        if (user == null)
+            return false;
+        if (user.getRole() == Role.ADMIN)
+            return true;
+        return coin.getOwner() != null && coin.getOwner().getId().equals(user.getId());
     }
 
     @GetMapping
@@ -44,24 +60,48 @@ public class CoinController {
     }
 
     @PostMapping
-    public ResponseEntity<Coin> createCoin(@RequestBody Coin coin) {
+    public ResponseEntity<?> createCoin(@RequestBody Coin coin) {
+        User user = getAuthenticatedUser();
+        if (user == null || user.getRole() == Role.USER_SIMPLE) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only wallets and admins can create coins.");
+        }
+        coin.setOwner(user);
         Coin savedCoin = coinService.createCoin(coin);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCoin);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Coin> updateCoin(@PathVariable Long id, @RequestBody Coin coinDetails) {
+    public ResponseEntity<?> updateCoin(@PathVariable Long id, @RequestBody Coin coinDetails) {
+        User user = getAuthenticatedUser();
+        Optional<Coin> existingCoin = coinService.getCoinById(id);
+
+        if (existingCoin.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        if (!isOwnerOrAdmin(user, existingCoin.get())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not allowed to edit.");
+        }
+
         Optional<Coin> updatedCoin = coinService.updateCoin(id, coinDetails);
         return updatedCoin.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCoin(@PathVariable Long id) {
-        if (coinService.deleteCoin(id)) {
-            return ResponseEntity.noContent().build();
-        } else {
+    public ResponseEntity<?> deleteCoin(@PathVariable Long id) {
+        User user = getAuthenticatedUser();
+        Optional<Coin> existingCoin = coinService.getCoinById(id);
+
+        if (existingCoin.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
+
+        if (!isOwnerOrAdmin(user, existingCoin.get())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not allowed to delete.");
+        }
+
+        coinService.deleteCoin(id);
+        return ResponseEntity.noContent().build();
     }
 }

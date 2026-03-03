@@ -11,18 +11,18 @@ Este documento proyecta las tareas técnicas a realizar para añadir una capa de
 - [x] **Task:** Crear la entidad `User` (Con campos: `id`, `email`, `password`, `walletAddress`, `role`).
 - [x] **Task:** Modificar la entidad `Coin` para incluir una relación `@ManyToOne` con `User` indicando el `owner`.
 - [x] **Task:** Actualizar `DataSeeder` para inyectar automáticamente el usuario Administrador Dueño y asignarle el `owner` a las monedas pre-sembradas cuando inicie la aplicación en `H2`.
-- [~] **Task:** Conductor - User Manual Verification 'Fase 1: Configuración de Base de Datos y Entidades para Usuarios' (Protocol in workflow.md)
+- [x] **Task:** Conductor - User Manual Verification 'Fase 1: Configuración de Base de Datos y Entidades para Usuarios' (Protocol in workflow.md)
 
 ---
 
 ### Fase 2: Backend - Capa de Autenticación, JWT y Servicios
 
-- [ ] **Task:** Crear configuración `SecurityConfig` de Spring Security para autorizar y deshabilitar endpoints públicos vs protegidos.
-- [ ] **Task:** Desarrollar los `JwtUtils` y un `JwtAuthenticationFilter` para interceptar validaciones de token en las peticiones.
-- [ ] **Task:** Implementar controlador `AuthController` con endpoints genéricos para `/api/auth/register` (Simple), `/api/auth/login` (Simple) y `/api/auth/web3/login` (Metamask).
-- [ ] **Task:** Implementar la lógica matemática Web3 para verificar las firmas ECRecovered enviadas de las wallets criptográficas desde el cliente, asegurando la propiedad de la llave pública.
-- [ ] **Task:** Adaptar `CoinController` y `CoinService` para que los datos devueltos (DTO opcional o entidad) incluyan la info de dueño y que las operaciones CUD queden aseguradas solo para el dueño o para el ADMIN.
-- [ ] **Task:** Conductor - User Manual Verification 'Fase 2: Backend API Auth y Protección de Rutas' (Protocol in workflow.md)
+- [x] **Task:** Crear configuración `SecurityConfig` de Spring Security para autorizar y deshabilitar endpoints públicos vs protegidos.
+- [x] **Task:** Desarrollar los `JwtUtils` y un `JwtAuthenticationFilter` para interceptar validaciones de token en las peticiones.
+- [x] **Task:** Implementar controlador `AuthController` con endpoints genéricos para `/api/auth/register` (Simple), `/api/auth/login` (Simple) y `/api/auth/web3/login` (Metamask).
+- [x] **Task:** Implementar la lógica matemática Web3 para verificar las firmas ECRecovered enviadas de las wallets criptográficas desde el cliente, asegurando la propiedad de la llave pública.
+- [x] **Task:** Adaptar `CoinController` y `CoinService` para que los datos devueltos (DTO opcional o entidad) incluyan la info de dueño y que las operaciones CUD queden aseguradas solo para el dueño o para el ADMIN.
+- [~] **Task:** Conductor - User Manual Verification 'Fase 2: Backend API Auth y Protección de Rutas' (Protocol in workflow.md)
 
 ---
 
