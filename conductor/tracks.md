@@ -4,5 +4,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Construir el catálogo de exhibición principal, incluyendo la estructura de datos de las monedas, la API para consultarlas y la interfaz de usuario para visualizarlas con filtros de búsqueda.**
+- [x] **Track: Construir el catálogo de exhibición principal, incluyendo la estructura de datos de las monedas, la API para consultarlas y la interfaz de usuario para visualizarlas con filtros de búsqueda.**
   *Link: [./tracks/catalogo-mvp_20260207/](./tracks/catalogo-mvp_20260207/)*
+
+- [ ] **Track: Formularios de Administración de Monedas (Crear, Editar, Eliminar)**
+  *Link: [./tracks/admin-monedas_20260302/](./tracks/admin-monedas_20260302/)*
