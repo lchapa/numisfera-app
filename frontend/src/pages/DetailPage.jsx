@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 import { apiService } from '../services/apiService';
 import '../styles/DetailPage.css';
 
 const DetailPage = () => {
     const { id } = useParams();
+    const { user } = useContext(AuthContext);
     const [coin, setCoin] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -97,6 +99,14 @@ const DetailPage = () => {
                                 <span className="spec-label">Grado de Conservación</span>
                                 <span className="spec-value">{coin.grade}</span>
                             </li>
+                            {user && coin.owner && (
+                                <li>
+                                    <span className="spec-label">Dueño / Custodio</span>
+                                    <span className="spec-value" style={{ color: '#FFD700', fontWeight: 'bold' }}>
+                                        {coin.owner.walletAddress ? `${coin.owner.walletAddress.slice(0, 6)}...${coin.owner.walletAddress.slice(-4)}` : coin.owner.email}
+                                    </span>
+                                </li>
+                            )}
                         </ul>
                     </div>
                 </div>

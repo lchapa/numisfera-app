@@ -32,19 +32,19 @@ Este documento proyecta las tareas técnicas a realizar para añadir una capa de
 - [x] **Task:** Crear un React Context `AuthContext` + `AuthProvider` para englobar el estado global de la aplicación web (`user`, `token`, `role`, funciones `login`, `logout`).
 - [x] **Task:** Desarrollar la pantalla o modal unificado de Autenticación (Simple Email/Password o botón unificado *"Connect Metamask"*).
 - [x] **Task:** Modificar las cabeceras HTTP en `apiService.js` para incrustar el `Bearer Token` JWT automáticamente en cada llamado al backend si el usuario está autenticado.
-- [~] **Task:** Conductor - User Manual Verification 'Fase 3: Desarrollo de React Context y Modales de Autenticación Frontend' (Protocol in workflow.md)
+- [x] **Task:** Conductor - User Manual Verification 'Fase 3: Desarrollo de React Context y Modales de Autenticación Frontend' (Protocol in workflow.md)
 
 ---
 
 ### Fase 4: Frontend - Roles Responsivos y Rutas Protegidas
 
-- [ ] **Task:** Adaptar `CoinCard` y `DetailPage`:
+- [x] **Task:** Adaptar `CoinCard` y `DetailPage`:
    - Usuarios *Anónimos* no verán al dueño. 
    - Usuarios *Autenticados* podrán ver quién es el `owner` de cada criptomoneda/pieza numismática de la exhibición.
-- [ ] **Task:** Adaptar `/admin` (`AdminPage.jsx`) transformándola en una `ProtectedRoute` donde obligues un login.
-- [ ] **Task:** Modificar vistas administrativas según el rol: 
+- [x] **Task:** Adaptar `/admin` (`AdminPage.jsx`) transformándola en una `ProtectedRoute` donde obligues un login.
+- [x] **Task:** Modificar vistas administrativas según el rol: 
    - El *ADMIN* ve todas las monedas como siempre. 
    - El *WALLET_USER* solo visualizará en la tabla, modificará o insertará monedas asociadas a él.
    - Si el rol es *SIMPLE_USER* denegar el acceso a la tabla administrativa mediante un cartel (ya que no puede adquirir dueño).
-- [ ] **Task:** Modificar el `<Header>` para reflejar las iniciales, avatar, dirección trunca de wallet (0x12..AB) y un botón interactivo de Status/Logout.
+- [x] **Task:** Modificar el `<Header>` para reflejar las iniciales, avatar, dirección trunca de wallet (0x12..AB) y un botón interactivo de Status/Logout.
 - [ ] **Task:** Conductor - User Manual Verification 'Fase 4: Despliegue Completo de Seguridad y Roles' (Protocol in workflow.md)

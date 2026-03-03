@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { apiService } from '../services/apiService';
+import { AuthContext } from '../context/AuthContext';
 import CoinForm from '../components/CoinForm';
 import '../styles/AdminPage.css';
 
 const AdminPage = () => {
+    const { user, role } = useContext(AuthContext);
     const [coins, setCoins] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -34,6 +36,9 @@ const AdminPage = () => {
     useEffect(() => {
         fetchCoins();
     }, []);
+
+    // Filter coins for Wallet users. Admin sees all.
+    const displayCoins = role === 'ADMIN' ? coins : coins.filter(c => c.owner?.id === user?.id);
 
     // Form Handlers
     const handleOpenCreateForm = () => {
@@ -94,12 +99,27 @@ const AdminPage = () => {
         setCoinToDelete(null);
     };
 
+    if (role === 'USER_SIMPLE') {
+        return (
+            <div className="admin-page slide-up" style={{ textAlign: 'center', marginTop: '4rem' }}>
+                <span style={{ fontSize: '4rem' }}>🔒</span>
+                <h2 style={{ color: '#fca5a5', marginTop: '1rem' }}>Acceso Denegado</h2>
+                <p style={{ color: '#94a3b8' }}>Tu cuenta es de visualización. Solo Administradores y Billeteras pueden gestionar monedas propias.</p>
+            </div>
+        );
+    }
+
     return (
         <div className="admin-page slide-up">
             <div className="admin-header">
                 <div>
                     <h2>Panel de Administración Numismática</h2>
                     <p>Gestiona, edita o retira piezas de tu inventario histórico.</p>
+                    {role === 'USER_WALLET' && (
+                        <span className="badge" style={{ marginTop: '0.8rem', display: 'inline-block', background: 'rgba(246, 133, 27, 0.2)', color: '#F6851B', border: '1px solid #F6851B' }}>
+                            Modo Web3: Mostrando solo tus monedas firmadas.
+                        </span>
+                    )}
                 </div>
                 {!isFormOpen && (
                     <button className="btn-add-coin" onClick={handleOpenCreateForm}>
@@ -140,12 +160,14 @@ const AdminPage = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {coins.length === 0 ? (
+                                {displayCoins.length === 0 ? (
                                     <tr>
-                                        <td colSpan="6" className="table-empty">No hay monedas en el archivo.</td>
+                                        <td colSpan="6" className="table-empty">
+                                            {role === 'USER_WALLET' ? 'Aún no posees ninguna moneda. ¡Agrega una a tu wallet!' : 'No hay monedas en el archivo.'}
+                                        </td>
                                     </tr>
                                 ) : (
-                                    coins.map(coin => (
+                                    displayCoins.map(coin => (
                                         <tr key={coin.id}>
                                             <td className="td-id">#{coin.id}</td>
                                             <td className="td-name"><strong>{coin.name}</strong></td>

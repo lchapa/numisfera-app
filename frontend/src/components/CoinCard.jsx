@@ -1,7 +1,11 @@
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 import '../styles/CoinCard.css';
 
 const CoinCard = ({ coin }) => {
+    const { user } = useContext(AuthContext);
+
     return (
         <div className="coin-card group">
             <div className="coin-card-image-wrapper">
@@ -26,6 +30,11 @@ const CoinCard = ({ coin }) => {
                     <span className="coin-material">{coin.material}</span>
                     <span className="coin-grade">{coin.grade}</span>
                 </div>
+                {user && coin.owner && (
+                    <div className="owner-badge" style={{ marginTop: '0.8rem', fontSize: '0.8rem', color: '#FFD700', borderTop: '1px solid rgba(255, 255, 255, 0.1)', paddingTop: '0.5rem' }}>
+                        👤 {coin.owner.walletAddress ? `${coin.owner.walletAddress.slice(0, 6)}...${coin.owner.walletAddress.slice(-4)}` : coin.owner.email}
+                    </div>
+                )}
             </div>
         </div>
     );
