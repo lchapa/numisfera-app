@@ -25,6 +25,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.numisfera.api.model.User;
+import com.numisfera.api.model.Role;
+import com.numisfera.api.repository.UserRepository;
+import com.numisfera.api.security.services.UserDetailsImpl;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 
 @WebMvcTest(CoinController.class)
@@ -37,13 +45,31 @@ public class CoinControllerTest {
     @MockBean
     private CoinService coinService;
 
+    @MockBean
+    private UserRepository userRepository;
+
     private Coin coin1;
     private Coin coin2;
+    private User adminUser;
 
     @BeforeEach
     public void setup() {
-        coin1 = new Coin(1L, "Centenario", "Mexico", 1921, "Gold", "Desc", "MS-62", "url1", null);
-        coin2 = new Coin(2L, "Morgan", "USA", 1881, "Silver", "Desc", "MS-64", "url2", null);
+        adminUser = new User();
+        adminUser.setId(100L);
+        adminUser.setEmail("admin@test.com");
+        adminUser.setRole(Role.ADMIN);
+
+        UserDetailsImpl userDetails = UserDetailsImpl.build(adminUser);
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                userDetails, null, userDetails.getAuthorities());
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(auth);
+        SecurityContextHolder.setContext(context);
+
+        given(userRepository.findById(100L)).willReturn(Optional.of(adminUser));
+
+        coin1 = new Coin(1L, "Centenario", "Mexico", 1921, "Gold", "Desc", "MS-62", "url1", adminUser);
+        coin2 = new Coin(2L, "Morgan", "USA", 1881, "Silver", "Desc", "MS-64", "url2", adminUser);
     }
 
     @Test
@@ -94,6 +120,7 @@ public class CoinControllerTest {
 
     @Test
     public void testUpdateCoin() throws Exception {
+        given(coinService.getCoinById(1L)).willReturn(Optional.of(coin1));
         given(coinService.updateCoin(anyLong(), any(Coin.class))).willReturn(Optional.of(coin1));
 
         ObjectMapper mapper = new ObjectMapper();
@@ -108,6 +135,7 @@ public class CoinControllerTest {
 
     @Test
     public void testDeleteCoin_Success() throws Exception {
+        given(coinService.getCoinById(1L)).willReturn(Optional.of(coin1));
         given(coinService.deleteCoin(1L)).willReturn(true);
 
         mockMvc.perform(delete("/api/coins/1")
