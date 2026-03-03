@@ -15,9 +15,15 @@ import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(CoinController.class)
 public class CoinControllerTest {
@@ -65,6 +71,52 @@ public class CoinControllerTest {
         given(coinService.getCoinById(99L)).willReturn(Optional.empty());
 
         mockMvc.perform(get("/api/coins/99")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testCreateCoin() throws Exception {
+        given(coinService.createCoin(any(Coin.class))).willReturn(coin1);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String coinJson = mapper.writeValueAsString(coin1);
+
+        mockMvc.perform(post("/api/coins")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(coinJson))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name", is("Centenario")));
+    }
+
+    @Test
+    public void testUpdateCoin() throws Exception {
+        given(coinService.updateCoin(anyLong(), any(Coin.class))).willReturn(Optional.of(coin1));
+
+        ObjectMapper mapper = new ObjectMapper();
+        String coinJson = mapper.writeValueAsString(coin1);
+
+        mockMvc.perform(put("/api/coins/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(coinJson))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is("Centenario")));
+    }
+
+    @Test
+    public void testDeleteCoin_Success() throws Exception {
+        given(coinService.deleteCoin(1L)).willReturn(true);
+
+        mockMvc.perform(delete("/api/coins/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void testDeleteCoin_NotFound() throws Exception {
+        given(coinService.deleteCoin(99L)).willReturn(false);
+
+        mockMvc.perform(delete("/api/coins/99")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }

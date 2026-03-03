@@ -8,8 +8,8 @@ Este plan detalla las fases para implementar las funciones Create, Update, y Del
 
 - [x] **Task:** Implementar los métodos `createCoin`, `updateCoin` y `deleteCoin` en la interfaz `CoinService` y su implementación `CoinServiceImpl`.
 - [x] **Task:** Desarrollar pruebas unitarias con `Mockito` en `CoinServiceTest` para los métodos de guardado, actualización y borrado de monedas.
-- [ ] **Task:** Implementar los endpoints `@PostMapping`, `@PutMapping("/{id}")` y `@DeleteMapping("/{id}")` en el `CoinController`.
-- [ ] **Task:** Desarrollar pruebas de integración con `MockMvc` en `CoinControllerTest` para validar los endpoints POST, PUT y DELETE.
+- [x] **Task:** Implementar los endpoints `@PostMapping`, `@PutMapping("/{id}")` y `@DeleteMapping("/{id}")` en el `CoinController`.
+- [x] **Task:** Desarrollar pruebas de integración con `MockMvc` en `CoinControllerTest` para validar los endpoints POST, PUT y DELETE.
 - [ ] **Task:** Conductor - User Manual Verification 'Fase 1: Backend - Capa de Servicio y Controlador' (Protocol in workflow.md)
 
 ---
