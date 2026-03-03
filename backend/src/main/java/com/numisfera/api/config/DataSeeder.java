@@ -11,16 +11,19 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 @Configuration
 public class DataSeeder {
 
     @Bean
-    public CommandLineRunner initData(CoinRepository coinRepository, UserRepository userRepository) {
+    public CommandLineRunner initData(CoinRepository coinRepository, UserRepository userRepository,
+            PasswordEncoder passwordEncoder) {
         return args -> {
             if (userRepository.count() == 0) {
                 User admin = new User();
                 admin.setEmail("admin@numisfera.com");
-                admin.setPassword("admin123"); // To be encoded later
+                admin.setPassword(passwordEncoder.encode("admin123"));
                 admin.setWalletAddress("0xAdminWallet123");
                 admin.setRole(Role.ADMIN);
                 userRepository.save(admin);
