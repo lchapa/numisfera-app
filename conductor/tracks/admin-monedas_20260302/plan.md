@@ -10,16 +10,16 @@ Este plan detalla las fases para implementar las funciones Create, Update, y Del
 - [x] **Task:** Desarrollar pruebas unitarias con `Mockito` en `CoinServiceTest` para los métodos de guardado, actualización y borrado de monedas.
 - [x] **Task:** Implementar los endpoints `@PostMapping`, `@PutMapping("/{id}")` y `@DeleteMapping("/{id}")` en el `CoinController`.
 - [x] **Task:** Desarrollar pruebas de integración con `MockMvc` en `CoinControllerTest` para validar los endpoints POST, PUT y DELETE.
-- [ ] **Task:** Conductor - User Manual Verification 'Fase 1: Backend - Capa de Servicio y Controlador' (Protocol in workflow.md)
+- [x] **Task:** Conductor - User Manual Verification 'Fase 1: Backend - Capa de Servicio y Controlador' (Protocol in workflow.md)
 
 ---
 
 ### Fase 2: Frontend - Servicios API y Componentes
 
-- [ ] **Task:** Añadir los métodos `createCoin`, `updateCoin` y `deleteCoin` a `apiService.js` utilizando `fetch`.
-- [ ] **Task:** Crear el componente `CoinForm` que permita capturar los campos de una moneda (Nombre, Material, País, Año, Grado, Descripción). El componente debe reutilizarse para Crear y Editar.
-- [ ] **Task:** Crear la página `AdminPage` que conste de una tabla con todas las monedas, un botón para agregar una nueva, y botones en cada fila para "Editar" y "Eliminar".
-- [ ] **Task:** Implementar un modal o sección para confirmar la eliminación de una moneda en la `AdminPage`.
+- [x] **Task:** Añadir los métodos `createCoin`, `updateCoin` y `deleteCoin` a `apiService.js` utilizando `fetch`.
+- [x] **Task:** Crear el componente `CoinForm` que permita capturar los campos de una moneda (Nombre, Material, País, Año, Grado, Descripción). El componente debe reutilizarse para Crear y Editar.
+- [x] **Task:** Crear la página `AdminPage` que conste de una tabla con todas las monedas, un botón para agregar una nueva, y botones en cada fila para "Editar" y "Eliminar".
+- [x] **Task:** Implementar un modal o sección para confirmar la eliminación de una moneda en la `AdminPage`.
 - [ ] **Task:** Conductor - User Manual Verification 'Fase 2: Frontend - Servicios API y Componentes' (Protocol in workflow.md)
 
 ---
