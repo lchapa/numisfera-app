@@ -8,4 +8,10 @@ public interface CoinService {
     List<Coin> getAllCoins();
 
     Optional<Coin> getCoinById(Long id);
+
+    Coin createCoin(Coin coin);
+
+    Optional<Coin> updateCoin(Long id, Coin coinDetails);
+
+    boolean deleteCoin(Long id);
 }

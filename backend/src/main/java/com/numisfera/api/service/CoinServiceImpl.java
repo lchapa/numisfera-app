@@ -27,4 +27,31 @@ public class CoinServiceImpl implements CoinService {
     public Optional<Coin> getCoinById(Long id) {
         return coinRepository.findById(id);
     }
+
+    @Override
+    public Coin createCoin(Coin coin) {
+        return coinRepository.save(coin);
+    }
+
+    @Override
+    public Optional<Coin> updateCoin(Long id, Coin coinDetails) {
+        return coinRepository.findById(id).map(existingCoin -> {
+            existingCoin.setName(coinDetails.getName());
+            existingCoin.setCountry(coinDetails.getCountry());
+            existingCoin.setYear(coinDetails.getYear());
+            existingCoin.setMaterial(coinDetails.getMaterial());
+            existingCoin.setDescription(coinDetails.getDescription());
+            existingCoin.setGrade(coinDetails.getGrade());
+            existingCoin.setImageUrl(coinDetails.getImageUrl());
+            return coinRepository.save(existingCoin);
+        });
+    }
+
+    @Override
+    public boolean deleteCoin(Long id) {
+        return coinRepository.findById(id).map(existingCoin -> {
+            coinRepository.delete(existingCoin);
+            return true;
+        }).orElse(false);
+    }
 }

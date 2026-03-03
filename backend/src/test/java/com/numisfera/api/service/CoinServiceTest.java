@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -82,5 +83,50 @@ public class CoinServiceTest {
 
         // then
         assertThat(coin).isNotPresent();
+    }
+
+    @Test
+    public void testCreateCoin() {
+        given(coinRepository.save(any(Coin.class))).willReturn(coin1);
+
+        Coin savedCoin = coinService.createCoin(coin1);
+
+        assertThat(savedCoin).isNotNull();
+        assertThat(savedCoin.getId()).isEqualTo(1L);
+    }
+
+    @Test
+    public void testUpdateCoin() {
+        Coin updateDetails = new Coin();
+        updateDetails.setName("Updated Coin");
+        updateDetails.setCountry("Updated Country");
+
+        given(coinRepository.findById(1L)).willReturn(Optional.of(coin1));
+        given(coinRepository.save(any(Coin.class))).willReturn(coin1);
+
+        Optional<Coin> updatedCoin = coinService.updateCoin(1L, updateDetails);
+
+        assertThat(updatedCoin).isPresent();
+        assertThat(updatedCoin.get().getName()).isEqualTo("Updated Coin");
+        assertThat(updatedCoin.get().getCountry()).isEqualTo("Updated Country");
+    }
+
+    @Test
+    public void testDeleteCoin() {
+        given(coinRepository.findById(1L)).willReturn(Optional.of(coin1));
+
+        boolean isDeleted = coinService.deleteCoin(1L);
+
+        assertThat(isDeleted).isTrue();
+        verify(coinRepository).delete(coin1);
+    }
+
+    @Test
+    public void testDeleteCoin_NotFound() {
+        given(coinRepository.findById(99L)).willReturn(Optional.empty());
+
+        boolean isDeleted = coinService.deleteCoin(99L);
+
+        assertThat(isDeleted).isFalse();
     }
 }
