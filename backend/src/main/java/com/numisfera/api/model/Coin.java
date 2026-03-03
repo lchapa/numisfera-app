@@ -36,4 +36,8 @@ public class Coin {
 
     @Column
     private String imageUrl;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
+    private User owner;
 }

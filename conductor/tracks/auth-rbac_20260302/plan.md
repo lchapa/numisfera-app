@@ -6,12 +6,12 @@ Este documento proyecta las tareas técnicas a realizar para añadir una capa de
 
 ### Fase 1: Backend - Modelado de Seguridad y Propiedad de Monedas
 
-- [ ] **Task:** Añadir la dependencia de Spring Security y JWT (`io.jsonwebtoken`) en `pom.xml`.
-- [ ] **Task:** Crear el enumerador `Role` (`USER_SIMPLE`, `USER_WALLET`, `ADMIN`).
-- [ ] **Task:** Crear la entidad `User` (Con campos: `id`, `email`, `password`, `walletAddress`, `role`).
-- [ ] **Task:** Modificar la entidad `Coin` para incluir una relación `@ManyToOne` con `User` indicando el `owner`.
-- [ ] **Task:** Actualizar `DataSeeder` para inyectar automáticamente el usuario Administrador Dueño y asignarle el `owner` a las monedas pre-sembradas cuando inicie la aplicación en `H2`.
-- [ ] **Task:** Conductor - User Manual Verification 'Fase 1: Configuración de Base de Datos y Entidades para Usuarios' (Protocol in workflow.md)
+- [x] **Task:** Añadir la dependencia de Spring Security y JWT (`io.jsonwebtoken`) en `pom.xml`.
+- [x] **Task:** Crear el enumerador `Role` (`USER_SIMPLE`, `USER_WALLET`, `ADMIN`).
+- [x] **Task:** Crear la entidad `User` (Con campos: `id`, `email`, `password`, `walletAddress`, `role`).
+- [x] **Task:** Modificar la entidad `Coin` para incluir una relación `@ManyToOne` con `User` indicando el `owner`.
+- [x] **Task:** Actualizar `DataSeeder` para inyectar automáticamente el usuario Administrador Dueño y asignarle el `owner` a las monedas pre-sembradas cuando inicie la aplicación en `H2`.
+- [~] **Task:** Conductor - User Manual Verification 'Fase 1: Configuración de Base de Datos y Entidades para Usuarios' (Protocol in workflow.md)
 
 ---
 

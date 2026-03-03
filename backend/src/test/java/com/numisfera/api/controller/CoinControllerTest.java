@@ -25,7 +25,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+
 @WebMvcTest(CoinController.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class CoinControllerTest {
 
     @Autowired
@@ -39,8 +42,8 @@ public class CoinControllerTest {
 
     @BeforeEach
     public void setup() {
-        coin1 = new Coin(1L, "Centenario", "Mexico", 1921, "Gold", "Desc", "MS-62", "url1");
-        coin2 = new Coin(2L, "Morgan", "USA", 1881, "Silver", "Desc", "MS-64", "url2");
+        coin1 = new Coin(1L, "Centenario", "Mexico", 1921, "Gold", "Desc", "MS-62", "url1", null);
+        coin2 = new Coin(2L, "Morgan", "USA", 1881, "Silver", "Desc", "MS-64", "url2", null);
     }
 
     @Test
