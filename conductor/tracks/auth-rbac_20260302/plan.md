@@ -22,17 +22,17 @@ Este documento proyecta las tareas técnicas a realizar para añadir una capa de
 - [x] **Task:** Implementar controlador `AuthController` con endpoints genéricos para `/api/auth/register` (Simple), `/api/auth/login` (Simple) y `/api/auth/web3/login` (Metamask).
 - [x] **Task:** Implementar la lógica matemática Web3 para verificar las firmas ECRecovered enviadas de las wallets criptográficas desde el cliente, asegurando la propiedad de la llave pública.
 - [x] **Task:** Adaptar `CoinController` y `CoinService` para que los datos devueltos (DTO opcional o entidad) incluyan la info de dueño y que las operaciones CUD queden aseguradas solo para el dueño o para el ADMIN.
-- [~] **Task:** Conductor - User Manual Verification 'Fase 2: Backend API Auth y Protección de Rutas' (Protocol in workflow.md)
+- [x] **Task:** Conductor - User Manual Verification 'Fase 2: Backend API Auth y Protección de Rutas' (Protocol in workflow.md)
 
 ---
 
 ### Fase 3: Frontend - Integración Metamask, Ethers.js y AuthContext
 
-- [ ] **Task:** Instalar las dependencias web3 para el frontend (ej. `ethers` v6).
-- [ ] **Task:** Crear un React Context `AuthContext` + `AuthProvider` para englobar el estado global de la aplicación web (`user`, `token`, `role`, funciones `login`, `logout`).
-- [ ] **Task:** Desarrollar la pantalla o modal unificado de Autenticación (Simple Email/Password o botón unificado *"Connect Metamask"*).
-- [ ] **Task:** Modificar las cabeceras HTTP en `apiService.js` para incrustar el `Bearer Token` JWT automáticamente en cada llamado al backend si el usuario está autenticado.
-- [ ] **Task:** Conductor - User Manual Verification 'Fase 3: Desarrollo de React Context y Modales de Autenticación Frontend' (Protocol in workflow.md)
+- [x] **Task:** Instalar las dependencias web3 para el frontend (ej. `ethers` v6).
+- [x] **Task:** Crear un React Context `AuthContext` + `AuthProvider` para englobar el estado global de la aplicación web (`user`, `token`, `role`, funciones `login`, `logout`).
+- [x] **Task:** Desarrollar la pantalla o modal unificado de Autenticación (Simple Email/Password o botón unificado *"Connect Metamask"*).
+- [x] **Task:** Modificar las cabeceras HTTP en `apiService.js` para incrustar el `Bearer Token` JWT automáticamente en cada llamado al backend si el usuario está autenticado.
+- [~] **Task:** Conductor - User Manual Verification 'Fase 3: Desarrollo de React Context y Modales de Autenticación Frontend' (Protocol in workflow.md)
 
 ---
 

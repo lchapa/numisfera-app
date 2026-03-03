@@ -1,6 +1,58 @@
 const API_BASE_URL = 'http://localhost:8080/api/coins';
+const AUTH_URL = 'http://localhost:8080/api/auth';
+
+const getHeaders = () => {
+    const token = localStorage.getItem('token');
+    return {
+        'Content-Type': 'application/json',
+        ...(token && { 'Authorization': `Bearer ${token}` })
+    };
+};
 
 export const apiService = {
+    // ---- AUTHENTICATION ENDPOINTS ----
+
+    login: async (credentials) => {
+        const response = await fetch(`${AUTH_URL}/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(credentials)
+        });
+        if (!response.ok) {
+            const err = await response.json();
+            throw new Error(err.message || 'Error en login');
+        }
+        return await response.json();
+    },
+
+    register: async (credentials) => {
+        const response = await fetch(`${AUTH_URL}/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(credentials)
+        });
+        if (!response.ok) {
+            const err = await response.json();
+            throw new Error(err.message || 'Error en registro');
+        }
+        return await response.json();
+    },
+
+    web3Login: async (web3Data) => {
+        const response = await fetch(`${AUTH_URL}/web3/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(web3Data)
+        });
+        if (!response.ok) {
+            const err = await response.json();
+            throw new Error(err.message || 'Error en firma Web3');
+        }
+        return await response.json();
+    },
+
+    // ---- CATALOG & COIN ENDPOINTS ----
+
     /**
      * Fetches the complete list of coins from the backend.
      * @returns {Promise<Array>} A promise that resolves to an array of coin objects.
@@ -45,9 +97,7 @@ export const apiService = {
         try {
             const response = await fetch(API_BASE_URL, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: getHeaders(),
                 body: JSON.stringify(coinData)
             });
             if (!response.ok) {
@@ -70,9 +120,7 @@ export const apiService = {
         try {
             const response = await fetch(`${API_BASE_URL}/${id}`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: getHeaders(),
                 body: JSON.stringify(coinData)
             });
             if (!response.ok) {
@@ -93,7 +141,8 @@ export const apiService = {
     deleteCoin: async (id) => {
         try {
             const response = await fetch(`${API_BASE_URL}/${id}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: getHeaders()
             });
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
