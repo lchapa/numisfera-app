@@ -19,10 +19,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import org.springframework.mock.web.MockMultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.numisfera.api.model.User;
@@ -115,9 +115,11 @@ public class CoinControllerTest {
         ObjectMapper mapper = new ObjectMapper();
         String coinJson = mapper.writeValueAsString(coin1);
 
-        mockMvc.perform(post("/api/coins")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(coinJson))
+        MockMultipartFile coinPart = new MockMultipartFile("coin", "", "application/json", coinJson.getBytes());
+
+        mockMvc.perform(multipart("/api/coins")
+                .file(coinPart)
+                .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", is("Centenario")));
     }
@@ -130,9 +132,15 @@ public class CoinControllerTest {
         ObjectMapper mapper = new ObjectMapper();
         String coinJson = mapper.writeValueAsString(coin1);
 
-        mockMvc.perform(put("/api/coins/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(coinJson))
+        MockMultipartFile coinPart = new MockMultipartFile("coin", "", "application/json", coinJson.getBytes());
+
+        mockMvc.perform(multipart("/api/coins/1")
+                .file(coinPart)
+                .with(request -> {
+                    request.setMethod("PUT");
+                    return request;
+                })
+                .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("Centenario")));
     }

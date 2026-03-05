@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -72,10 +73,9 @@ public class CoinController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping(consumes = { "multipart/form-data", "application/json" })
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createCoin(
-            @RequestPart(value = "coin", required = false) String coinJsonStr,
-            @RequestBody(required = false) Coin coinBody,
+            @RequestPart(value = "coin") String coinJsonStr,
             @RequestPart(value = "images", required = false) MultipartFile[] images) {
         try {
             User user = getAuthenticatedUser();
@@ -83,7 +83,7 @@ public class CoinController {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only wallets and admins can create coins.");
             }
 
-            Coin coin = coinBody != null ? coinBody : objectMapper.readValue(coinJsonStr, Coin.class);
+            Coin coin = objectMapper.readValue(coinJsonStr, Coin.class);
             coin.setOwner(user);
 
             if (images != null && images.length > maxUploads) {
@@ -109,11 +109,10 @@ public class CoinController {
         }
     }
 
-    @PutMapping(value = "/{id}", consumes = { "multipart/form-data", "application/json" })
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateCoin(
             @PathVariable Long id,
-            @RequestPart(value = "coin", required = false) String coinJsonStr,
-            @RequestBody(required = false) Coin coinBody,
+            @RequestPart(value = "coin") String coinJsonStr,
             @RequestPart(value = "images", required = false) MultipartFile[] images) {
         try {
             User user = getAuthenticatedUser();
@@ -128,7 +127,7 @@ public class CoinController {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not allowed to edit.");
             }
 
-            Coin coinDetails = coinBody != null ? coinBody : objectMapper.readValue(coinJsonStr, Coin.class);
+            Coin coinDetails = objectMapper.readValue(coinJsonStr, Coin.class);
 
             if (images != null && images.length > maxUploads) {
                 return ResponseEntity.badRequest().body("Maximum " + maxUploads + " images allowed.");
