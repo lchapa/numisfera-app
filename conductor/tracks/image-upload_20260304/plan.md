@@ -16,11 +16,11 @@ Este documento proyecta las tareas técnicas a realizar para añadir la funciona
 - [x] **Task:** Refactorizar DataSeeder y Tests para ajustarse al uso de Arrays de imágenes.
 
 ## Fase 3: Frontend - Formularios Web Multipart
-- [ ] **Task:** Configurar `VITE_MAX_IMAGES=3` en `.env` raíz de Frontend.
-- [ ] **Task:** Modificar `apiService.js` para el registro/edición, enviando ahora formularios `FormData` (Blob para archivo + Texto JSON para Data) y forzando que Axios/Fetch cambien los `Headers`. 
-- [ ] **Task:** Actualizar el componente `CoinForm.jsx` para agregar un pre-visualizador de imágenes subidas o de entrada `<input type="file" multiple max={3} />`.
+- [x] **Task:** Configurar `VITE_MAX_IMAGES=3` en `.env` raíz de Frontend.
+- [x] **Task:** Modificar `apiService.js` para el registro/edición, enviando ahora formularios `FormData` (Blob para archivo + Texto JSON para Data) y forzando que Axios/Fetch cambien los `Headers`. 
+- [x] **Task:** Actualizar el componente `CoinForm.jsx` para agregar un pre-visualizador de imágenes subidas o de entrada `<input type="file" multiple max={3} />`.
 
 ## Fase 4: Frontend - Galería Visual y Lightbox
-- [ ] **Task:** Refactorizar `CoinCard.jsx` para que tome y renderice `imageUrls[0]` como portada en el Catálogo en vez de la sola URL antigua.
-- [ ] **Task:** Adaptar `DetailPage.jsx` renderizando todos los thumbnails.
-- [ ] **Task:** Implementar Modal "Lightbox" Nativo en React dentro de `DetailPage` para abrir y escalar con un click la foto para alta definición. 
+- [x] **Task:** Refactorizar `CoinCard.jsx` para que tome y renderice `imageUrls[0]` como portada en el Catálogo en vez de la sola URL antigua.
+- [x] **Task:** Adaptar `DetailPage.jsx` renderizando todos los thumbnails.
+- [x] **Task:** Implementar Modal "Lightbox" Nativo en React dentro de `DetailPage` para abrir y escalar con un click la foto para alta definición. 

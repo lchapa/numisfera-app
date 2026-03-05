@@ -10,7 +10,7 @@ const CoinCard = ({ coin }) => {
         <div className="coin-card group">
             <div className="coin-card-image-wrapper">
                 <img
-                    src={coin.imageUrl || 'https://via.placeholder.com/150'}
+                    src={(coin.imageUrls && coin.imageUrls.length > 0) ? `http://localhost:8080${coin.imageUrls[0]}` : 'https://via.placeholder.com/150'}
                     alt={coin.name}
                     className="coin-card-image"
                 />

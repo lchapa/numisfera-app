@@ -2,14 +2,17 @@ import { useState, useEffect } from 'react';
 import '../styles/CoinForm.css';
 
 const CoinForm = ({ initialData, onSubmit, onCancel, loading }) => {
+    const MAX_IMAGES = parseInt(import.meta.env.VITE_MAX_IMAGES || '3', 10);
+    const [selectedImages, setSelectedImages] = useState([]);
+    const [existingImages, setExistingImages] = useState([]);
+
     const [formData, setFormData] = useState({
         name: '',
         country: '',
         year: '',
         material: '',
         description: '',
-        grade: '',
-        imageUrl: ''
+        grade: ''
     });
 
     useEffect(() => {
@@ -20,9 +23,11 @@ const CoinForm = ({ initialData, onSubmit, onCancel, loading }) => {
                 year: initialData.year || '',
                 material: initialData.material || '',
                 description: initialData.description || '',
-                grade: initialData.grade || '',
-                imageUrl: initialData.imageUrl || ''
+                grade: initialData.grade || ''
             });
+            if (initialData.imageUrls && initialData.imageUrls.length > 0) {
+                setExistingImages(initialData.imageUrls);
+            }
         }
     }, [initialData]);
 
@@ -34,14 +39,33 @@ const CoinForm = ({ initialData, onSubmit, onCancel, loading }) => {
         }));
     };
 
+    const handleImageChange = (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length > MAX_IMAGES) {
+            alert(`Solo puedes subir un máximo de ${MAX_IMAGES} fotos.`);
+            e.target.value = ''; // Reset input
+            setSelectedImages([]);
+            return;
+        }
+        setSelectedImages(files);
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        // basic casting
+
         const submissionData = {
             ...formData,
             year: parseInt(formData.year, 10) || null
         };
-        onSubmit(submissionData);
+
+        const fd = new FormData();
+        fd.append('coin', JSON.stringify(submissionData));
+
+        selectedImages.forEach((img) => {
+            fd.append('images', img);
+        });
+
+        onSubmit(fd);
     };
 
     return (
@@ -113,15 +137,26 @@ const CoinForm = ({ initialData, onSubmit, onCancel, loading }) => {
                 </div>
 
                 <div className="form-group span-2">
-                    <label htmlFor="imageUrl">URL de la Imagen</label>
+                    <label htmlFor="images">Fotografías (Sube hasta {MAX_IMAGES})</label>
                     <input
-                        type="url"
-                        id="imageUrl"
-                        name="imageUrl"
-                        value={formData.imageUrl}
-                        onChange={handleChange}
-                        placeholder="https://..."
+                        type="file"
+                        id="images"
+                        name="images"
+                        accept="image/*"
+                        multiple
+                        onChange={handleImageChange}
+                        className="file-input"
                     />
+                    {existingImages.length > 0 && selectedImages.length === 0 && (
+                        <div className="image-previews">
+                            <p>Fotos actuales:</p>
+                            <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                                {existingImages.map((url, idx) => (
+                                    <img key={idx} src={`http://localhost:8080${url}`} alt="Preview" style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '4px' }} />
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 <div className="form-group span-2">

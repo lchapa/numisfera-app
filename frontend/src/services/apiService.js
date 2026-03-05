@@ -1,12 +1,16 @@
 const API_BASE_URL = 'http://localhost:8080/api/coins';
 const AUTH_URL = 'http://localhost:8080/api/auth';
 
-const getHeaders = () => {
+const getHeaders = (isFormData = false) => {
     const token = localStorage.getItem('token');
-    return {
-        'Content-Type': 'application/json',
-        ...(token && { 'Authorization': `Bearer ${token}` })
-    };
+    const headers = {};
+    if (!isFormData) {
+        headers['Content-Type'] = 'application/json';
+    }
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+    return headers;
 };
 
 export const apiService = {
@@ -90,18 +94,19 @@ export const apiService = {
 
     /**
      * Creates a new coin.
-     * @param {Object} coinData - The details of the new coin.
+     * @param {FormData} coinData - The details of the new coin including images as FormData.
      * @returns {Promise<Object>} A promise that resolves to the created coin.
      */
     createCoin: async (coinData) => {
         try {
             const response = await fetch(API_BASE_URL, {
                 method: 'POST',
-                headers: getHeaders(),
-                body: JSON.stringify(coinData)
+                headers: getHeaders(true),
+                body: coinData
             });
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const err = await response.text();
+                throw new Error(`Error ${response.status}: ${err}`);
             }
             return await response.json();
         } catch (error) {
@@ -113,18 +118,19 @@ export const apiService = {
     /**
      * Updates an existing coin.
      * @param {number|string} id - The ID of the coin to update.
-     * @param {Object} coinData - The new data of the coin.
+     * @param {FormData} coinData - The new data of the coin including images as FormData.
      * @returns {Promise<Object>} A promise that resolves to the updated coin.
      */
     updateCoin: async (id, coinData) => {
         try {
             const response = await fetch(`${API_BASE_URL}/${id}`, {
                 method: 'PUT',
-                headers: getHeaders(),
-                body: JSON.stringify(coinData)
+                headers: getHeaders(true),
+                body: coinData
             });
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const err = await response.text();
+                throw new Error(`Error ${response.status}: ${err}`);
             }
             return await response.json();
         } catch (error) {
