@@ -10,10 +10,10 @@ Este documento proyecta las tareas técnicas a realizar para añadir la funciona
 - [x] **Task:** Exponer mediante Configuración un mapeo de recursos para poder servir `http://localhost:8080/api/uploads/imagen.jpg` desde la carpeta estática.
 
 ## Fase 2: Backend - Modelado de Múltiples Imágenes y Controlador
-- [ ] **Task:** Modificar la entidad `Coin` y sus DTO: de usar `String imageUrl` a una colección `List<String> imageUrls` en BD conservando persistencia en cascada o vía ElementCollection.
-- [ ] **Task:** Refactorizar `CoinController` (`POST` y `PUT`) para que, en lugar de recibir un JSON puro genérico, maneje `multipart/form-data` (JSON o Text param + `MultipartFile[] images`).
-- [ ] **Task:** Ajustar la capa de `CoinService` para delegar con limitantes (ej. validación MaxImages) las fotos al Storage, y retornar listado de strings con las rutas definitivas para guardar en base de datos.
-- [ ] **Task:** Refactorizar DataSeeder y Tests para ajustarse al uso de Arrays de imágenes.
+- [x] **Task:** Modificar la entidad `Coin` y sus DTO: de usar `String imageUrl` a una colección `List<String> imageUrls` en BD conservando persistencia en cascada o vía ElementCollection.
+- [x] **Task:** Refactorizar `CoinController` (`POST` y `PUT`) para que, en lugar de recibir un JSON puro genérico, maneje `multipart/form-data` (JSON o Text param + `MultipartFile[] images`).
+- [x] **Task:** Ajustar la capa de `CoinService` para delegar con limitantes (ej. validación MaxImages) las fotos al Storage, y retornar listado de strings con las rutas definitivas para guardar en base de datos.
+- [x] **Task:** Refactorizar DataSeeder y Tests para ajustarse al uso de Arrays de imágenes.
 
 ## Fase 3: Frontend - Formularios Web Multipart
 - [ ] **Task:** Configurar `VITE_MAX_IMAGES=3` en `.env` raíz de Frontend.
