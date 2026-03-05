@@ -36,8 +36,10 @@ public class Coin {
     @Column
     private String grade;
 
-    @Column
-    private String imageUrl;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "coin_images", joinColumns = @JoinColumn(name = "coin_id"))
+    @Column(name = "image_url")
+    private java.util.List<String> imageUrls = new java.util.ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")

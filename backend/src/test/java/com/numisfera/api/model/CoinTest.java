@@ -16,7 +16,7 @@ public class CoinTest {
         coin.setMaterial("Gold");
         coin.setDescription("A beautiful Mexican gold coin.");
         coin.setGrade("MS-62");
-        coin.setImageUrl("http://example.com/centenario.jpg");
+        coin.setImageUrls(java.util.List.of("http://example.com/centenario.jpg"));
 
         assertEquals(1L, coin.getId());
         assertEquals("Centenario", coin.getName());
@@ -25,6 +25,6 @@ public class CoinTest {
         assertEquals("Gold", coin.getMaterial());
         assertEquals("A beautiful Mexican gold coin.", coin.getDescription());
         assertEquals("MS-62", coin.getGrade());
-        assertEquals("http://example.com/centenario.jpg", coin.getImageUrl());
+        assertEquals(java.util.List.of("http://example.com/centenario.jpg"), coin.getImageUrls());
     }
 }

@@ -37,7 +37,7 @@ public class DataSeeder {
                     coin1.setDescription(
                             "50 pesos gold coin commemorating the 100th anniversary of Mexico's independence.");
                     coin1.setGrade("MS-62");
-                    coin1.setImageUrl("dummy-url-1.jpg");
+                    coin1.setImageUrls(List.of("/api/uploads/dummy-url-1.jpg"));
                     coin1.setOwner(admin);
 
                     Coin coin2 = new Coin();
@@ -47,7 +47,7 @@ public class DataSeeder {
                     coin2.setMaterial("Silver");
                     coin2.setDescription("Classic silver dollar minted from 1878 to 1904, and again in 1921.");
                     coin2.setGrade("MS-64");
-                    coin2.setImageUrl("dummy-url-2.jpg");
+                    coin2.setImageUrls(List.of("/api/uploads/dummy-url-2.jpg"));
                     coin2.setOwner(admin);
 
                     coinRepository.saveAll(List.of(coin1, coin2));

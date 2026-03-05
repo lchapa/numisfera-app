@@ -25,7 +25,7 @@ public class CoinRepositoryTest {
         coin.setMaterial("Silver");
         coin.setDescription("A famous silver dollar.");
         coin.setGrade("MS-65");
-        coin.setImageUrl("http://example.com/morgan.jpg");
+        coin.setImageUrls(java.util.List.of("http://example.com/morgan.jpg"));
 
         Coin savedCoin = coinRepository.save(coin);
 

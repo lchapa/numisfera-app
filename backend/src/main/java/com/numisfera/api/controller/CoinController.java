@@ -13,6 +13,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.numisfera.api.service.ImageStorageService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.multipart.MultipartFile;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,11 +28,19 @@ public class CoinController {
 
     private final CoinService coinService;
     private final UserRepository userRepository;
+    private final ImageStorageService imageStorageService;
+    private final ObjectMapper objectMapper;
+
+    @Value("${app.images.max-uploads:3}")
+    private int maxUploads;
 
     @Autowired
-    public CoinController(CoinService coinService, UserRepository userRepository) {
+    public CoinController(CoinService coinService, UserRepository userRepository,
+            ImageStorageService imageStorageService, ObjectMapper objectMapper) {
         this.coinService = coinService;
         this.userRepository = userRepository;
+        this.imageStorageService = imageStorageService;
+        this.objectMapper = objectMapper;
     }
 
     private User getAuthenticatedUser() {
@@ -59,33 +72,92 @@ public class CoinController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<?> createCoin(@RequestBody Coin coin) {
-        User user = getAuthenticatedUser();
-        if (user == null || user.getRole() == Role.USER_SIMPLE) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only wallets and admins can create coins.");
+    @PostMapping(consumes = { "multipart/form-data", "application/json" })
+    public ResponseEntity<?> createCoin(
+            @RequestPart(value = "coin", required = false) String coinJsonStr,
+            @RequestBody(required = false) Coin coinBody,
+            @RequestPart(value = "images", required = false) MultipartFile[] images) {
+        try {
+            User user = getAuthenticatedUser();
+            if (user == null || user.getRole() == Role.USER_SIMPLE) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only wallets and admins can create coins.");
+            }
+
+            Coin coin = coinBody != null ? coinBody : objectMapper.readValue(coinJsonStr, Coin.class);
+            coin.setOwner(user);
+
+            if (images != null && images.length > maxUploads) {
+                return ResponseEntity.badRequest().body("Maximum " + maxUploads + " images allowed.");
+            }
+
+            List<String> imageUrls = new ArrayList<>();
+            if (images != null) {
+                for (MultipartFile file : images) {
+                    if (!file.isEmpty()) {
+                        String url = imageStorageService.storeImage(file);
+                        imageUrls.add(url);
+                    }
+                }
+            }
+            coin.setImageUrls(imageUrls);
+
+            Coin savedCoin = coinService.createCoin(coin);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedCoin);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error processing request: " + e.getMessage());
         }
-        coin.setOwner(user);
-        Coin savedCoin = coinService.createCoin(coin);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedCoin);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateCoin(@PathVariable Long id, @RequestBody Coin coinDetails) {
-        User user = getAuthenticatedUser();
-        Optional<Coin> existingCoin = coinService.getCoinById(id);
+    @PutMapping(value = "/{id}", consumes = { "multipart/form-data", "application/json" })
+    public ResponseEntity<?> updateCoin(
+            @PathVariable Long id,
+            @RequestPart(value = "coin", required = false) String coinJsonStr,
+            @RequestBody(required = false) Coin coinBody,
+            @RequestPart(value = "images", required = false) MultipartFile[] images) {
+        try {
+            User user = getAuthenticatedUser();
+            Optional<Coin> existingCoinOpt = coinService.getCoinById(id);
 
-        if (existingCoin.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            if (existingCoinOpt.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            Coin existingCoin = existingCoinOpt.get();
+            if (!isOwnerOrAdmin(user, existingCoin)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not allowed to edit.");
+            }
+
+            Coin coinDetails = coinBody != null ? coinBody : objectMapper.readValue(coinJsonStr, Coin.class);
+
+            if (images != null && images.length > maxUploads) {
+                return ResponseEntity.badRequest().body("Maximum " + maxUploads + " images allowed.");
+            }
+
+            if (images != null && images.length > 0) {
+                for (String oldImg : existingCoin.getImageUrls()) {
+                    imageStorageService.deleteImage(oldImg);
+                }
+
+                List<String> imageUrls = new ArrayList<>();
+                for (MultipartFile file : images) {
+                    if (!file.isEmpty()) {
+                        String url = imageStorageService.storeImage(file);
+                        imageUrls.add(url);
+                    }
+                }
+                coinDetails.setImageUrls(imageUrls);
+            } else {
+                coinDetails.setImageUrls(existingCoin.getImageUrls());
+            }
+
+            Optional<Coin> updatedCoin = coinService.updateCoin(id, coinDetails);
+            return updatedCoin.map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error processing request: " + e.getMessage());
         }
-
-        if (!isOwnerOrAdmin(user, existingCoin.get())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not allowed to edit.");
-        }
-
-        Optional<Coin> updatedCoin = coinService.updateCoin(id, coinDetails);
-        return updatedCoin.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
