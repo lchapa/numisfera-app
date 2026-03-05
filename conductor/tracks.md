@@ -10,5 +10,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 - [x] **Track: Formularios de Administración de Monedas (Crear, Editar, Eliminar)**
   *Link: [./tracks/admin-monedas_20260302/](./tracks/admin-monedas_20260302/)*
 
-- [ ] **Track: Usuarios, Roles y Autenticación Criptográfica (Metamask + JWT)**
+- [x] **Track: Usuarios, Roles y Autenticación Criptográfica (Metamask + JWT)**
   *Link: [./tracks/auth-rbac_20260302/](./tracks/auth-rbac_20260302/)*
+
+- [ ] **Track: Carga de Imágenes Múltiples con Soporte Local/Nube**
+  *Link: [./tracks/image-upload_20260304/](./tracks/image-upload_20260304/)*
