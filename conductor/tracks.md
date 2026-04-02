@@ -16,5 +16,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 - [x] **Track: Carga de Imágenes Múltiples con Soporte Local/Nube**
   *Link: [./tracks/image-upload_20260304/](./tracks/image-upload_20260304/)*
 
-- [ ] **Track: Creación y Minteo de NFTs (ERC-721) con Ganache**
+- [x] **Track: Creación y Minteo de NFTs (ERC-721) con Ganache**
   *Link: [./tracks/nft-minting_20260402/](./tracks/nft-minting_20260402/)*
