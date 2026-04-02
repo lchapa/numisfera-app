@@ -2,6 +2,8 @@ import { useState, useEffect, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { apiService } from '../services/apiService';
+import { ethers } from 'ethers';
+import NumisferaNFT from '../contracts/NumisferaNFT.json';
 import '../styles/DetailPage.css';
 
 const DetailPage = () => {
@@ -12,6 +14,7 @@ const DetailPage = () => {
     const [error, setError] = useState(null);
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [isMinting, setIsMinting] = useState(false);
 
     const openLightbox = (index) => {
         setCurrentImageIndex(index);
@@ -58,6 +61,46 @@ const DetailPage = () => {
         ? coin.imageUrls.map(url => `http://localhost:8080${url}`)
         : ['https://via.placeholder.com/400'];
 
+    const handleMintNFT = async () => {
+        if (!window.ethereum) {
+            alert('Por favor instala MetaMask u otra Web3 wallet.');
+            return;
+        }
+        
+        try {
+            setIsMinting(true);
+            const provider = new ethers.BrowserProvider(window.ethereum);
+            const signer = await provider.getSigner();
+
+            const contractAddress = import.meta.env.VITE_NFT_CONTRACT_ADDRESS || '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+            const contract = new ethers.Contract(contractAddress, NumisferaNFT.abi, signer);
+
+            const tokenURI = `ipfs://numisfera.coin/${coin.id}`;
+
+            const tx = await contract.mintPiece(signer.address, tokenURI);
+            const receipt = await tx.wait();
+
+            let finalTokenId = "0";
+            for (const log of receipt.logs) {
+                try {
+                    const parsed = contract.interface.parseLog(log);
+                    if (parsed && parsed.name === 'PieceMinted') {
+                        finalTokenId = parsed.args[0].toString();
+                    }
+                } catch(e) {}
+            }
+
+            const updatedCoin = await apiService.tokenizeCoin(coin.id, finalTokenId, contractAddress);
+            setCoin(updatedCoin);
+            alert(`¡Éxito! NFT minteado e indexado en Blockchain con ID #${finalTokenId}.`);
+        } catch (err) {
+            console.error(err);
+            alert('Fallo al mintear el NFT: ' + (err.reason || err.message));
+        } finally {
+            setIsMinting(false);
+        }
+    };
+
     return (
         <div className="detail-page slide-up">
             <div className="detail-back-nav">
@@ -103,11 +146,34 @@ const DetailPage = () => {
 
                 <div className="detail-info-section">
                     <div className="detail-header">
-                        <h2>{coin.name}</h2>
-                        <div className="detail-badges">
-                            <span className="badge badge-year">{coin.year}</span>
-                            <span className="badge badge-grade">{coin.grade}</span>
+                        <div className="title-and-badges">
+                            <h2>{coin.name}</h2>
+                            <div className="detail-badges">
+                                <span className="badge badge-year">{coin.year}</span>
+                                <span className="badge badge-grade">{coin.grade}</span>
+                            </div>
                         </div>
+                        {coin.tokenId ? (
+                            <div className="nft-badge">
+                                ⭐ NFT Registrado On-Chain (ID: #{coin.tokenId})
+                            </div>
+                        ) : (
+                            user && coin.owner && (user.walletAddress === coin.owner.walletAddress || user.id === coin.owner.id) && (
+                                <button
+                                    className="mint-nft-btn"
+                                    onClick={handleMintNFT}
+                                    disabled={isMinting}
+                                    style={{
+                                        background: 'linear-gradient(45deg, #FFD700, #FDB931)', border: 'none',
+                                        color: '#000', fontWeight: 'bold', padding: '10px 20px', borderRadius: '8px',
+                                        cursor: isMinting ? 'not-allowed' : 'pointer', fontSize: '1rem',
+                                        opacity: isMinting ? 0.7 : 1, alignSelf: 'flex-start'
+                                    }}
+                                >
+                                    {isMinting ? '⚙️ Confirmando Tx...' : '💎 Transformar en NFT'}
+                                </button>
+                            )
+                        )}
                     </div>
 
                     <p className="detail-country">{coin.country}</p>

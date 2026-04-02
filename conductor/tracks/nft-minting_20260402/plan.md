@@ -36,6 +36,6 @@ Permitir a los dueños de las piezas (ya autenticados mediante una wallet de Eth
 - [x] **Task:** Ofrecer un Endpoint (`PUT /api/coins/{id}/tokenize`) o expandir `/api/coins/{id}` para actualizar exclusivamente si una moneda se acaba de tokenizar (grabando un comprobante en BD).
 
 ### Fase 4: Frontend y Flujo de Wallet Web3 para el Minteo
-- [ ] **Task:** Modificar la `DetailPage` o diseñar una pantalla específica interactiva para realizar el "Mint". Si el dueño está autenticado, verá un botón llamativo con `Mintear o Tokenizar Pieza en Ethereum`.
-- [ ] **Task:** Cuando se da click a mintear, generar los parámetros (`tokenURI` temporal de metadatos estáticos construidos) y enviar a Ethers.js la transacción para que el SmartContract mintee a la *"Web3 Provider"* seleccionada en el Front (como MetaMask) consumiendo gas del usuario.
-- [ ] **Task:** Una vez confirmada la Transacción Web3 de manera exitosa, guardar en base de datos vía el Endpoint mencionado el ID emitido y la dirección del nuevo token. Mostrar mensaje exitoso al usuario.
+- [x] **Task:** Modificar la `DetailPage` o diseñar una pantalla específica interactiva para realizar el "Mint". Si el dueño está autenticado, verá un botón llamativo con `Mintear o Tokenizar Pieza en Ethereum`.
+- [x] **Task:** Cuando se da click a mintear, generar los parámetros (`tokenURI` temporal de metadatos estáticos construidos) y enviar a Ethers.js la transacción para que el SmartContract mintee a la *"Web3 Provider"* seleccionada en el Front (como MetaMask) consumiendo gas del usuario.
+- [x] **Task:** Una vez confirmada la Transacción Web3 de manera exitosa, guardar en base de datos vía el Endpoint mencionado el ID emitido y la dirección del nuevo token. Mostrar mensaje exitoso al usuario.

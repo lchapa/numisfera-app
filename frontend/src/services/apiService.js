@@ -158,5 +158,28 @@ export const apiService = {
             console.error(`Error deleting coin with id ${id}:`, error);
             throw error;
         }
+    },
+
+    /**
+     * Updates the coin explicitly marking it as tokenized with its blockchain data
+     * @param {number|string} id 
+     * @param {string} tokenId
+     * @param {string} contractAddress
+     */
+    tokenizeCoin: async (id, tokenId, contractAddress) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/${id}/tokenize`, {
+                method: 'PUT',
+                headers: getHeaders(),
+                body: JSON.stringify({ tokenId, contractAddress })
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return await response.json();
+        } catch (error) {
+            console.error(`Error tokenizing coin with id ${id}:`, error);
+            throw error;
+        }
     }
 };
