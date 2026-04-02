@@ -32,8 +32,8 @@ Permitir a los dueños de las piezas (ya autenticados mediante una wallet de Eth
 - [x] **Task:** Construir los *Unit Tests* del Smart Contract en JavaScript/TypeScript para probar los flujos exitosos y bloqueantes de Minteo. (Garantizar cobertura probando que el minteo falla si la validación falla o que se le asigne la pieza a quien paga el gas).
 
 ### Fase 3: Integración Back-End 
-- [ ] **Task:** Agregar en la entidad `Coin` de Java 2 nuevas columnas: una para el `tokenId` global (string/integer) y otra referenciando el `contractAddress`. 
-- [ ] **Task:** Ofrecer un Endpoint (`PUT /api/coins/{id}/tokenize`) o expandir `/api/coins/{id}` para actualizar exclusivamente si una moneda se acaba de tokenizar (grabando un comprobante en BD).
+- [x] **Task:** Agregar en la entidad `Coin` de Java 2 nuevas columnas: una para el `tokenId` global (string/integer) y otra referenciando el `contractAddress`. 
+- [x] **Task:** Ofrecer un Endpoint (`PUT /api/coins/{id}/tokenize`) o expandir `/api/coins/{id}` para actualizar exclusivamente si una moneda se acaba de tokenizar (grabando un comprobante en BD).
 
 ### Fase 4: Frontend y Flujo de Wallet Web3 para el Minteo
 - [ ] **Task:** Modificar la `DetailPage` o diseñar una pantalla específica interactiva para realizar el "Mint". Si el dueño está autenticado, verá un botón llamativo con `Mintear o Tokenizar Pieza en Ethereum`.

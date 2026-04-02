@@ -72,8 +72,8 @@ public class CoinControllerTest {
         given(userRepository.findById(100L)).willReturn(Optional.of(adminUser));
 
         coin1 = new Coin(1L, "Centenario", "Mexico", 1921, "Gold", "Desc", "MS-62", java.util.List.of("url1"),
-                adminUser);
-        coin2 = new Coin(2L, "Morgan", "USA", 1881, "Silver", "Desc", "MS-64", java.util.List.of("url2"), adminUser);
+                adminUser, null, null);
+        coin2 = new Coin(2L, "Morgan", "USA", 1881, "Silver", "Desc", "MS-64", java.util.List.of("url2"), adminUser, null, null);
     }
 
     @Test

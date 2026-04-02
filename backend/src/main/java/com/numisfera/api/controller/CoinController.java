@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -156,6 +157,36 @@ public class CoinController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error processing request: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}/tokenize")
+    public ResponseEntity<?> tokenizeCoin(@PathVariable Long id, @RequestBody Map<String, String> tokenData) {
+        try {
+            User user = getAuthenticatedUser();
+            Optional<Coin> existingCoinOpt = coinService.getCoinById(id);
+
+            if (existingCoinOpt.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            Coin existingCoin = existingCoinOpt.get();
+            if (!isOwnerOrAdmin(user, existingCoin)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not allowed to tokenize.");
+            }
+
+            if (existingCoin.getTokenId() != null && !existingCoin.getTokenId().isEmpty()) {
+                return ResponseEntity.badRequest().body("Coin is already tokenized.");
+            }
+
+            existingCoin.setTokenId(tokenData.get("tokenId"));
+            existingCoin.setContractAddress(tokenData.get("contractAddress"));
+
+            Optional<Coin> updatedCoin = coinService.updateCoin(id, existingCoin);
+            return updatedCoin.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error processing tokenization: " + e.getMessage());
         }
     }
 

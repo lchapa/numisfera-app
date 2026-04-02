@@ -43,6 +43,8 @@ public class CoinServiceImpl implements CoinService {
             existingCoin.setDescription(coinDetails.getDescription());
             existingCoin.setGrade(coinDetails.getGrade());
             existingCoin.setImageUrls(coinDetails.getImageUrls());
+            existingCoin.setTokenId(coinDetails.getTokenId());
+            existingCoin.setContractAddress(coinDetails.getContractAddress());
             return coinRepository.save(existingCoin);
         });
     }

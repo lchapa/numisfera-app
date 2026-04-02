@@ -45,4 +45,10 @@ public class Coin {
     @JoinColumn(name = "owner_id")
     @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler", "password" })
     private User owner;
+
+    @Column(name = "token_id")
+    private String tokenId;
+
+    @Column(name = "contract_address")
+    private String contractAddress;
 }
