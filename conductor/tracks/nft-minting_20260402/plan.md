@@ -22,9 +22,9 @@ Permitir a los dueños de las piezas (ya autenticados mediante una wallet de Eth
 ## 🛠️ Plan de Ejecución (Fases)
 
 ### Fase 1: Entorno Blockchain y Creación del Contrato Inteligente
-- [ ] **Task:** Inicializar el ambiente Blockchain en el proyecto (Truffle o Hardhat) en una nueva carpeta `/blockchain` o `smart_contracts`.
-- [ ] **Task:** Crear el Smart Contract `NumisferaNFT.sol` utilizando Solidity `^0.8.20` importando bibliotecas `ERC721` y `Ownable` de OpenZeppelin.
-- [ ] **Task:** Implementar dentro del Contrato la función principal para `mintPiece(address to, string memory tokenURI)` (o similar), validando accesos y emitiendo el evento correspondiente de minteo.
+- [x] **Task:** Inicializar el ambiente Blockchain en el proyecto (Truffle o Hardhat) en una nueva carpeta `/blockchain` o `smart_contracts`.
+- [x] **Task:** Crear el Smart Contract `NumisferaNFT.sol` utilizando Solidity `^0.8.20` importando bibliotecas `ERC721` y `Ownable` de OpenZeppelin.
+- [x] **Task:** Implementar dentro del Contrato la función principal para `mintPiece(address to, string memory tokenURI)` (o similar), validando accesos y emitiendo el evento correspondiente de minteo.
 
 ### Fase 2: Configuración del Motor de Ganache y Pruebas
 - [ ] **Task:** Configurar adecuadamente la conexión a la blockchain local proveída por **Ganache** (`http://127.0.0.1:7545` o `http://127.0.0.1:8545`).
