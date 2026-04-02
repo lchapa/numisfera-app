@@ -27,9 +27,9 @@ Permitir a los dueños de las piezas (ya autenticados mediante una wallet de Eth
 - [x] **Task:** Implementar dentro del Contrato la función principal para `mintPiece(address to, string memory tokenURI)` (o similar), validando accesos y emitiendo el evento correspondiente de minteo.
 
 ### Fase 2: Configuración del Motor de Ganache y Pruebas
-- [ ] **Task:** Configurar adecuadamente la conexión a la blockchain local proveída por **Ganache** (`http://127.0.0.1:7545` o `http://127.0.0.1:8545`).
-- [ ] **Task:** Desarrollar scripts de despliegue (`deploy.js` o configuraciones `migrations/`) para montar el contrato `NumisferaNFT` en Ganache durante etapa de testing local.
-- [ ] **Task:** Construir los *Unit Tests* del Smart Contract en JavaScript/TypeScript para probar los flujos exitosos y bloqueantes de Minteo. (Garantizar cobertura probando que el minteo falla si la validación falla o que se le asigne la pieza a quien paga el gas).
+- [x] **Task:** Configurar adecuadamente la conexión a la blockchain local proveída por **Ganache** (`http://127.0.0.1:7545` o `http://127.0.0.1:8545`).
+- [x] **Task:** Desarrollar scripts de despliegue (`deploy.js` o configuraciones `migrations/`) para montar el contrato `NumisferaNFT` en Ganache durante etapa de testing local.
+- [x] **Task:** Construir los *Unit Tests* del Smart Contract en JavaScript/TypeScript para probar los flujos exitosos y bloqueantes de Minteo. (Garantizar cobertura probando que el minteo falla si la validación falla o que se le asigne la pieza a quien paga el gas).
 
 ### Fase 3: Integración Back-End 
 - [ ] **Task:** Agregar en la entidad `Coin` de Java 2 nuevas columnas: una para el `tokenId` global (string/integer) y otra referenciando el `contractAddress`. 
