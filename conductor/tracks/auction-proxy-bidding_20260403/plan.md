@@ -6,11 +6,11 @@ Este track tiene como objetivo implementar un sistema de subastas descentralizad
 ## Fases del Desarrollo
 
 ### Fase 1: Arquitectura y Smart Contract (Solidity)
-- [ ] **Task:** Crear el contrato inteligente `NumisferaAuction.sol` que se comunicará con `NumisferaNFT.sol`.
-- [ ] **Task:** Implementar la lógica para iniciar una subasta (`createAuction`), bloquear la pieza (trasladar el NFT al contrato o dar *approve*).
-- [ ] **Task:** Implementar lógica de *Proxy Bidding*. El pujador invía sus fondos (depósito del ETH de la puja máxima). El contrato on-chain determinará el "Current Bid" calculando el mínimo necesario vs el segundo mayor postor.
-- [ ] **Task:** Implementar la lógica de resolución (`endAuction` / `settleAuction`), ejecutando el cobro, la transferencia del NFT al ganador y tomando la comisión del 15% para el *Treasury* de Numisfera.
-- [ ] **Task:** Programar los *Unit Tests* del Smart Contract para garantizar seguridad (devoluciones a perdedores, cálculos correctos de Proxy Bid, etc).
+- [x] **Task:** Crear el contrato inteligente `NumisferaAuction.sol` que se comunicará con `NumisferaNFT.sol`.
+- [x] **Task:** Implementar la lógica para iniciar una subasta (`createAuction`), bloquear la pieza (trasladar el NFT al contrato o dar *approve*).
+- [x] **Task:** Implementar lógica de *Proxy Bidding*. El pujador invía sus fondos (depósito del ETH de la puja máxima). El contrato on-chain determinará el "Current Bid" calculando el mínimo necesario vs el segundo mayor postor.
+- [x] **Task:** Implementar la lógica de resolución (`endAuction` / `settleAuction`), ejecutando el cobro, la transferencia del NFT al ganador y tomando la comisión del 15% para el *Treasury* de Numisfera.
+- [x] **Task:** Programar los *Unit Tests* del Smart Contract para garantizar seguridad (devoluciones a perdedores, cálculos correctos de Proxy Bid, etc).
 
 ### Fase 2: Backend e Integración de Modelos (Java/Spring Boot)
 - [ ] **Task:** Modificar o crear entidades de Base de Datos para registrar localmente las subastas (Ej. `Auction`, `BidHistory`).  
