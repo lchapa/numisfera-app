@@ -25,6 +25,11 @@ const Header = () => {
                             <li>
                                 <Link to="/">Catálogo</Link>
                             </li>
+                            {user && (
+                                <li>
+                                    <Link to="/auctions">Mis Subastas</Link>
+                                </li>
+                            )}
                             {role !== 'USER_SIMPLE' && role !== 'USER_ANONYMOUS' && (
                                 <li>
                                     <Link to="/admin">Administración</Link>

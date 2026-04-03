@@ -181,5 +181,51 @@ export const apiService = {
             console.error(`Error tokenizing coin with id ${id}:`, error);
             throw error;
         }
+    },
+
+    // ---- AUCTION ENDPOINTS ----
+    createAuction: async (coinId, startingPrice, durationSeconds) => {
+        const res = await fetch(`http://localhost:8080/api/auctions/${coinId}`, {
+            method: 'POST',
+            headers: getHeaders(),
+            body: JSON.stringify({ startingPrice, durationSeconds })
+        });
+        if (!res.ok) throw new Error(await res.text());
+        return await res.json();
+    },
+
+    getAuctionDetails: async (coinId) => {
+        const res = await fetch(`http://localhost:8080/api/auctions/${coinId}`, {
+            headers: getHeaders()
+        });
+        if (res.status === 404) return null;
+        if (!res.ok) throw new Error(await res.text());
+        return await res.json();
+    },
+
+    recordBid: async (auctionId, proxyAmount, currentBid) => {
+        const res = await fetch(`http://localhost:8080/api/auctions/${auctionId}/bid`, {
+            method: 'POST',
+            headers: getHeaders(),
+            body: JSON.stringify({ proxyAmount, currentBid })
+        });
+        if (!res.ok) throw new Error(await res.text());
+        return await res.json();
+    },
+
+    settleAuctionLocal: async (auctionId) => {
+        const res = await fetch(`http://localhost:8080/api/auctions/${auctionId}/settle`, {
+            method: 'PUT',
+            headers: getHeaders()
+        });
+        if (!res.ok) throw new Error(await res.text());
+    },
+
+    getUserBids: async () => {
+        const res = await fetch(`http://localhost:8080/api/auctions/user`, {
+            headers: getHeaders()
+        });
+        if (!res.ok) throw new Error(await res.text());
+        return await res.json();
     }
 };

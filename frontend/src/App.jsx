@@ -4,6 +4,7 @@ import CatalogPage from './pages/CatalogPage';
 import DetailPage from './pages/DetailPage';
 import AdminPage from './pages/AdminPage';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
+import AuctionsPage from './pages/AuctionsPage';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<CatalogPage />} />
+          <Route path="auctions" element={<AuctionsPage />} />
           <Route path="coin/:id" element={<DetailPage />} />
           <Route path="admin" element={
             <ProtectedRoute allowedRoles={['ADMIN', 'USER_WALLET']}>

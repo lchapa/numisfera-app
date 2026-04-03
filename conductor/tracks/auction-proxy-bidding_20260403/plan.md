@@ -18,15 +18,15 @@ Este track tiene como objetivo implementar un sistema de subastas descentralizad
 - [x] **Task:** Sincronizar el estatus de la subasta periodicamente o al leer los detalles (o mediante Endpoints donde el FE envíe los eventos de conclusión).
 
 ### Fase 3: Detalle de Moneda y Funcionalidad del Vendedor (React)
-- [ ] **Task:** En `DetailPage.jsx`, agregar el formulario para **"Poner en Subasta"** si el dueño está autenticado y la pieza está minteada.
-- [ ] **Task:** Permitir que el dueño introduzca el **Precio Base** y **Tiempo Límite** (Fecha).
-- [ ] **Task:** Integrar MetaMask para enviar la orden `createAuction` concediendo permisos al Smart Contract sobre ese NFT en específico.
+- [x] **Task:** En `DetailPage.jsx`, agregar el formulario para **"Poner en Subasta"** si el dueño está autenticado y la pieza está minteada.
+- [x] **Task:** Permitir que el dueño introduzca el **Precio Base** y **Tiempo Límite** (Fecha).
+- [x] **Task:** Integrar MetaMask para enviar la orden `createAuction` concediendo permisos al Smart Contract sobre ese NFT en específico.
 
 ### Fase 4: Experiencia del Coleccionista y Proxy Bidding (React)
-- [ ] **Task:** Si una pieza está en subasta, mostrar UI especial en `DetailPage.jsx` revelando la puja actual y tiempo restante.
-- [ ] **Task:** Incluir formulario "Ingresa tu puja máxima" donde el comprador firme con Meta-Mask enviando el ether como garantía.
-- [ ] **Task:** Crear la pantalla / Panel de Coleccionista "Mis Subastas Activas" para mostrar monto actual ganador vs su límite Proxy (Pujas Activas, Ganadas o Perdidas).
-- [ ] **Task:** Al concluir el tiempo, mostrar botón o flujo automático de liquidación (`settleAuction`) que haga efectiva la transferencia del NFT y el pago al dueño (y a Numisfera).
+- [x] **Task:** Si una pieza está en subasta, mostrar UI especial en `DetailPage.jsx` revelando la puja actual y tiempo restante.
+- [x] **Task:** Incluir formulario "Ingresa tu puja máxima" donde el comprador firme con Meta-Mask enviando el ether como garantía.
+- [x] **Task:** Crear la pantalla / Panel de Coleccionista "Mis Subastas Activas" para mostrar monto actual ganador vs su límite Proxy (Pujas Activas, Ganadas o Perdidas).
+- [x] **Task:** Al concluir el tiempo, mostrar botón o flujo automático de liquidación (`settleAuction`) que haga efectiva la transferencia del NFT y el pago al dueño (y a Numisfera).
 
 ## Notas Técnicas y Dudas de Diseño
 * **Sobre la Puja Inicial:** Si Lock-Up ETH es complejo por la volatilidad, usaremos un flujo estándar Web3 (Depositar el Max Bid en Escrow o Contrato). El reembolso a las subastas superadas se hace automático (`auto-refund` mediante Pull/Withdrawal patterns para prevenir reentrancy).
