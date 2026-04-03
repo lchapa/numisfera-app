@@ -13,9 +13,9 @@ Este track tiene como objetivo implementar un sistema de subastas descentralizad
 - [x] **Task:** Programar los *Unit Tests* del Smart Contract para garantizar seguridad (devoluciones a perdedores, cálculos correctos de Proxy Bid, etc).
 
 ### Fase 2: Backend e Integración de Modelos (Java/Spring Boot)
-- [ ] **Task:** Modificar o crear entidades de Base de Datos para registrar localmente las subastas (Ej. `Auction`, `BidHistory`).  
-- [ ] **Task:** Crear nuevos Endpoints (`POST /api/auctions`) para que el frontend anuncie la creación de la subasta tras firmar en Blockchain, y (`GET /api/auctions/{coinId}`) para leer los detalles y pujas en tiempo real.
-- [ ] **Task:** Sincronizar el estatus de la subasta periodicamente o al leer los detalles (o mediante Endpoints donde el FE envíe los eventos de conclusión).
+- [x] **Task:** Modificar o crear entidades de Base de Datos para registrar localmente las subastas (Ej. `Auction`, `BidHistory`).  
+- [x] **Task:** Crear nuevos Endpoints (`POST /api/auctions`) para que el frontend anuncie la creación de la subasta tras firmar en Blockchain, y (`GET /api/auctions/{coinId}`) para leer los detalles y pujas en tiempo real.
+- [x] **Task:** Sincronizar el estatus de la subasta periodicamente o al leer los detalles (o mediante Endpoints donde el FE envíe los eventos de conclusión).
 
 ### Fase 3: Detalle de Moneda y Funcionalidad del Vendedor (React)
 - [ ] **Task:** En `DetailPage.jsx`, agregar el formulario para **"Poner en Subasta"** si el dueño está autenticado y la pieza está minteada.
