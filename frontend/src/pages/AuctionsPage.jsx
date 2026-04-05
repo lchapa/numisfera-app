@@ -21,7 +21,7 @@ const AuctionsPage = () => {
                 const data = await apiService.getUserBids();
                 // Filter out duplicates if the user naturally bid multiple times on the same auction to just show the latest proxy they committed per auction.
                 const uniqueAuctionsMap = new Map();
-                data.forEach(bid => {
+                data.filter(bid => bid.auction.active).forEach(bid => {
                     const existing = uniqueAuctionsMap.get(bid.auction.id);
                     if (!existing || new Date(bid.bidTime) > new Date(existing.bidTime)) {
                         uniqueAuctionsMap.set(bid.auction.id, bid);
@@ -63,7 +63,9 @@ const AuctionsPage = () => {
             ) : (
                 <div className="bids-grid">
                     {bids.map((bid) => {
-                        const isWinning = Number(bid.maxProxyAmount) >= Number(bid.auction.currentBid);
+                        const isWinning = user.walletAddress && bid.auction.highestBidderWallet && 
+                                        user.walletAddress.toLowerCase() === bid.auction.highestBidderWallet.toLowerCase();
+                        
                         const statusColor = isWinning ? '#27AE60' : '#E74C3C';
                         const statusIcon = isWinning ? '🏆' : '💀';
                         const statusText = isWinning ? 'Estás Ganando' : 'Superado';

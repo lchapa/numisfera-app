@@ -203,11 +203,11 @@ export const apiService = {
         return await res.json();
     },
 
-    recordBid: async (auctionId, proxyAmount, currentBid) => {
+    recordBid: async (auctionId, proxyAmount, currentBid, highestBidderWallet) => {
         const res = await fetch(`http://localhost:8080/api/auctions/${auctionId}/bid`, {
             method: 'POST',
             headers: getHeaders(),
-            body: JSON.stringify({ proxyAmount, currentBid })
+            body: JSON.stringify({ proxyAmount, currentBid, highestBidderWallet })
         });
         if (!res.ok) throw new Error(await res.text());
         return await res.json();

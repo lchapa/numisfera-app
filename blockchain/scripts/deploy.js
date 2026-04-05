@@ -16,11 +16,16 @@ async function main() {
   };
 
   const nft = await NumisferaNFT.deploy(deployer.address, txOptions);
-
   await nft.waitForDeployment();
+  const nftAddress = await nft.getAddress();
+  console.log("NumisferaNFT deployed to:", nftAddress);
 
-  const address = await nft.getAddress();
-  console.log("NumisferaNFT deployed to:", address);
+  // Deploy Auction and link it to the NFT
+  const NumisferaAuction = await hre.ethers.getContractFactory("NumisferaAuction");
+  const auction = await NumisferaAuction.deploy(nftAddress, txOptions);
+  await auction.waitForDeployment();
+  const auctionAddress = await auction.getAddress();
+  console.log("NumisferaAuction deployed to:", auctionAddress);
 }
 
 main().catch((error) => {

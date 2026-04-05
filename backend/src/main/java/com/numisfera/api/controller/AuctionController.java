@@ -78,8 +78,9 @@ public class AuctionController {
 
             BigDecimal proxyAmount = new BigDecimal(payload.get("proxyAmount").toString());
             BigDecimal resultingCurrentBid = new BigDecimal(payload.get("currentBid").toString());
+            String highestBidderWallet = payload.get("highestBidderWallet") != null ? payload.get("highestBidderWallet").toString() : null;
 
-            Bid bid = auctionService.placeBid(auctionId, user.getId(), proxyAmount, resultingCurrentBid);
+            Bid bid = auctionService.placeBid(auctionId, user.getId(), proxyAmount, resultingCurrentBid, highestBidderWallet);
             return ResponseEntity.ok(bid);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error recording bid: " + e.getMessage());

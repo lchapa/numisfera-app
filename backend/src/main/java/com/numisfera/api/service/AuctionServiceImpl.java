@@ -66,7 +66,7 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public Bid placeBid(Long auctionId, Long bidderId, BigDecimal proxyAmount, BigDecimal resultingCurrentBid) {
+    public Bid placeBid(Long auctionId, Long bidderId, BigDecimal proxyAmount, BigDecimal resultingCurrentBid, String highestBidderWallet) {
         Auction auction = auctionRepository.findById(auctionId)
                 .orElseThrow(() -> new RuntimeException("Auction not found"));
         User bidder = userRepository.findById(bidderId)
@@ -87,6 +87,7 @@ public class AuctionServiceImpl implements AuctionService {
         
         // Update auction state to match blockchain
         auction.setCurrentBid(resultingCurrentBid);
+        auction.setHighestBidderWallet(highestBidderWallet);
         auctionRepository.save(auction);
 
         return savedBid;
@@ -98,6 +99,17 @@ public class AuctionServiceImpl implements AuctionService {
                 .orElseThrow(() -> new RuntimeException("Auction not found"));
         auction.setActive(false);
         auctionRepository.save(auction);
+
+        if (auction.getHighestBidderWallet() != null && !auction.getHighestBidderWallet().isEmpty() 
+            && !auction.getHighestBidderWallet().equals("0x0000000000000000000000000000000000000000")) {
+            
+            // Find the winning user by wallet and transfer the off-chain entity property
+            userRepository.findByWalletAddress(auction.getHighestBidderWallet()).ifPresent(newOwner -> {
+                Coin coin = auction.getCoin();
+                coin.setOwner(newOwner);
+                coinRepository.save(coin);
+            });
+        }
     }
 
     @Override

@@ -42,6 +42,9 @@ public class Auction {
     @Column(name = "end_time", nullable = false)
     private LocalDateTime endTime;
 
+    @Column(name = "highest_bidder_wallet")
+    private String highestBidderWallet;
+
     @Column(nullable = false)
     private Boolean active = true;
 

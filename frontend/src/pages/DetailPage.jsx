@@ -17,11 +17,11 @@ const DetailPage = () => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isMinting, setIsMinting] = useState(false);
     
-    // Auction states
     const [auction, setAuction] = useState(null);
     const [isActionLoading, setIsActionLoading] = useState(false);
     const [startingPrice, setStartingPrice] = useState('0.1');
-    const [durationDays, setDurationDays] = useState('7');
+    const [durationDays, setDurationDays] = useState('0');
+    const [durationHours, setDurationHours] = useState('24');
     const [proxyBid, setProxyBid] = useState('');
 
     const openLightbox = (index) => {
@@ -38,7 +38,6 @@ const DetailPage = () => {
 
                 const auctionData = await apiService.getAuctionDetails(id);
                 setAuction(auctionData);
-
                 setError(null);
             } catch (err) {
                 setError('No se pudo cargar la información de la moneda o no existe en el catálogo.');
@@ -47,8 +46,24 @@ const DetailPage = () => {
             }
         };
 
-        fetchCoinDetails();
+        fetchData();
     }, [id]);
+
+    useEffect(() => {
+        if (auction && user) {
+            apiService.getUserBids().then((bids) => {
+                const myLatestBid = [...bids]
+                    .filter(b => b.auction.id === auction.id)
+                    .sort((a, b) => new Date(b.bidTime) - new Date(a.bidTime))[0];
+
+                if (myLatestBid) {
+                    setProxyBid(myLatestBid.maxProxyAmount);
+                } else {
+                    setProxyBid(auction.startingPrice);
+                }
+            }).catch(err => console.error(err));
+        }
+    }, [auction, user]);
 
     if (loading) {
         return (
@@ -133,12 +148,18 @@ const DetailPage = () => {
 
             // 2. Create Auction on-chain
             const priceInWei = ethers.parseEther(startingPrice);
-            const durationSeconds = parseInt(durationDays) * 24 * 60 * 60;
-            const tx = await auctionContract.createAuction(coin.tokenId, priceInWei, durationSeconds);
+            const totalSeconds = (parseInt(durationDays || '0') * 24 * 60 * 60) + (parseInt(durationHours || '0') * 60 * 60);
+            
+            if (totalSeconds < 3600) {
+                setIsActionLoading(false);
+                return alert('Tiempo inválido: La subasta debe durar al menos 1 hora.');
+            }
+            
+            const tx = await auctionContract.createAuction(coin.tokenId, priceInWei, totalSeconds);
             await tx.wait();
 
             // 3. Save purely to backend
-            const newAuction = await apiService.createAuction(coin.id, startingPrice, durationSeconds);
+            const newAuction = await apiService.createAuction(coin.id, startingPrice, totalSeconds);
             setAuction(newAuction);
             alert('¡Subasta creada exitosamente!');
         } catch (err) {
@@ -167,8 +188,9 @@ const DetailPage = () => {
             // Fetch the current bid state from the blockchain after the tx to sync backend
             const onchainAuction = await auctionContract.auctions(coin.tokenId);
             const currentBidEther = ethers.formatEther(onchainAuction.currentBid);
+            const highestBidderWallet = onchainAuction.highestBidder;
 
-            await apiService.recordBid(auction.id, proxyBid, currentBidEther);
+            await apiService.recordBid(auction.id, proxyBid, currentBidEther, highestBidderWallet);
             
             // Reload auction data from API
             const auctionData = await apiService.getAuctionDetails(id);
@@ -268,8 +290,9 @@ const DetailPage = () => {
                                     <div className="auction-form" style={{ marginTop: '1rem', background: '#2C2C2E', padding: '15px', borderRadius: '8px' }}>
                                         <h4 style={{ margin: '0 0 10px 0', color: '#FFD700' }}>Poner en Subasta</h4>
                                         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                                            <input type="number" step="0.01" value={startingPrice} onChange={e => setStartingPrice(e.target.value)} placeholder="Precio Salida (ETH)" style={{ width: '120px', padding: '5px' }} />
-                                            <input type="number" value={durationDays} onChange={e => setDurationDays(e.target.value)} placeholder="Días" style={{ width: '80px', padding: '5px' }} />
+                                            <input type="number" step="0.01" value={startingPrice} onChange={e => setStartingPrice(e.target.value)} placeholder="Salida (ETH)" style={{ width: '120px', padding: '5px' }} />
+                                            <input type="number" value={durationDays} onChange={e => setDurationDays(e.target.value)} placeholder="0 Días" style={{ width: '60px', padding: '5px' }} />
+                                            <input type="number" value={durationHours} onChange={e => setDurationHours(e.target.value)} placeholder="24 Horas" style={{ width: '70px', padding: '5px' }} />
                                             <button onClick={handleCreateAuction} disabled={isActionLoading} style={{ background: '#FFD700', border: 'none', padding: '6px 12px', fontWeight: 'bold', borderRadius: '4px', cursor: 'pointer' }}>
                                                 {isActionLoading ? '...' : 'Lanzar Subasta'}
                                             </button>
@@ -331,9 +354,9 @@ const DetailPage = () => {
                                 </div>
                             )}
 
-                            {auction.active && new Date() > new Date(auction.endTime) && (
+                            {auction.active && (
                                 <button onClick={handleSettleAuction} disabled={isActionLoading} style={{ width: '100%', marginTop: '15px', background: '#E74C3C', border: 'none', padding: '10px', borderRadius: '6px', fontWeight: 'bold', color: '#FFF', cursor: 'pointer' }}>
-                                    Liquidar Subasta (Expirada)
+                                    Liquidar Subasta (Forzado en Dev)
                                 </button>
                             )}
                         </div>
