@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { apiService } from '../services/apiService';
 import CoinCard from '../components/CoinCard';
 import '../styles/CatalogPage.css';
 
 const CatalogPage = () => {
+    const { t } = useTranslation();
     const [coins, setCoins] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -28,14 +30,14 @@ const CatalogPage = () => {
     return (
         <div className="catalog-page">
             <div className="catalog-header">
-                <h2>Catálogo de Exhibición</h2>
-                <p>Explora nuestra colección curada de monedas históricas para numismáticos exigentes.</p>
+                <h2>{t('catalog.title')}</h2>
+                <p>{t('catalog.subtitle')}</p>
             </div>
 
             {loading && (
                 <div className="catalog-loading">
                     <div className="spinner"></div>
-                    <p>Cargando el archivo numismático...</p>
+                    <p>{t('catalog.loading')}</p>
                 </div>
             )}
 
@@ -48,7 +50,7 @@ const CatalogPage = () => {
 
             {!loading && !error && coins.length === 0 && (
                 <div className="catalog-empty">
-                    <p>El catálogo se encuentra vacío en este momento.</p>
+                    <p>{t('catalog.noCoins')}</p>
                 </div>
             )}
 

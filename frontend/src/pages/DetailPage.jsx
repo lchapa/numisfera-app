@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { AuthContext } from '../context/AuthContext';
 import { apiService } from '../services/apiService';
 import { ethers } from 'ethers';
@@ -8,6 +9,7 @@ import NumisferaAuction from '../contracts/NumisferaAuction.json';
 import '../styles/DetailPage.css';
 
 const DetailPage = () => {
+    const { t } = useTranslation();
     const { id } = useParams();
     const { user } = useContext(AuthContext);
     const [coin, setCoin] = useState(null);
@@ -69,7 +71,7 @@ const DetailPage = () => {
         return (
             <div className="detail-loading">
                 <div className="spinner"></div>
-                <p>Analizando archivo numismático...</p>
+                <p>{t('catalog.loading')}</p>
             </div>
         );
     }
@@ -78,8 +80,8 @@ const DetailPage = () => {
         return (
             <div className="detail-error">
                 <span className="error-icon">⚠️</span>
-                <p>{error || 'Moneda no encontrada.'}</p>
-                <Link to="/" className="back-link">Volver al Catálogo</Link>
+                <p>{error || t('catalog.noCoins')}</p>
+                <Link to="/" className="back-link">{t('detail.backToCatalog')}</Link>
             </div>
         );
     }
@@ -119,10 +121,10 @@ const DetailPage = () => {
 
             const updatedCoin = await apiService.tokenizeCoin(coin.id, finalTokenId, contractAddress);
             setCoin(updatedCoin);
-            alert(`¡Éxito! NFT minteado e indexado en Blockchain con ID #${finalTokenId}.`);
+            alert(t('detail.auctionCreated').replace('¡Subasta creada exitosamente!', `¡Éxito! NFT minteado e indexado en Blockchain con ID #${finalTokenId}.`));
         } catch (err) {
             console.error(err);
-            alert('Fallo al mintear el NFT: ' + (err.reason || err.message));
+            alert(t('detail.notMintedFirst').replace('La pieza debe estar minteada primero', 'Fallo al mintear el NFT: ') + (err.reason || err.message));
         } finally {
             setIsMinting(false);
         }
@@ -152,7 +154,7 @@ const DetailPage = () => {
             
             if (totalSeconds < 3600) {
                 setIsActionLoading(false);
-                return alert('Tiempo inválido: La subasta debe durar al menos 1 hora.');
+                return alert(t('detail.errorTimeInvalid'));
             }
             
             const tx = await auctionContract.createAuction(coin.tokenId, priceInWei, totalSeconds);
@@ -161,18 +163,18 @@ const DetailPage = () => {
             // 3. Save purely to backend
             const newAuction = await apiService.createAuction(coin.id, startingPrice, totalSeconds);
             setAuction(newAuction);
-            alert('¡Subasta creada exitosamente!');
+            alert(t('detail.auctionCreated'));
         } catch (err) {
             console.error(err);
-            alert('Error al crear subasta: ' + (err.reason || err.message));
+            alert(t('detail.errorAuctionCreate') + ' ' + (err.reason || err.message));
         } finally {
             setIsActionLoading(false);
         }
     };
 
     const handlePlaceBid = async () => {
-        if (!window.ethereum) return alert('Instala MetaMask');
-        if (!proxyBid || isNaN(proxyBid)) return alert('Ingresa un monto válido');
+        if (!window.ethereum) return alert(t('detail.installMetamask'));
+        if (!proxyBid || isNaN(proxyBid)) return alert(t('detail.invalidAmount'));
         try {
             setIsActionLoading(true);
             const provider = new ethers.BrowserProvider(window.ethereum);
@@ -196,11 +198,11 @@ const DetailPage = () => {
             const auctionData = await apiService.getAuctionDetails(id);
             setAuction(auctionData);
 
-            alert('¡Puja registrada exitosamente!');
+            alert(t('detail.bidPlaced'));
             setProxyBid('');
         } catch (err) {
             console.error(err);
-            alert('Error al pujar: ' + (err.reason || err.message));
+            alert(t('detail.errorBid') + ' ' + (err.reason || err.message));
         } finally {
             setIsActionLoading(false);
         }
@@ -222,10 +224,10 @@ const DetailPage = () => {
             
             const auctionData = await apiService.getAuctionDetails(id);
             setAuction(auctionData);
-            alert('¡Subasta liquidada!');
+            alert(t('detail.auctionSettled'));
         } catch(err) {
             console.error(err);
-            alert('Error al liquidar: ' + (err.reason || err.message));
+            alert(t('detail.errorSettle') + ' ' + (err.reason || err.message));
         } finally {
             setIsActionLoading(false);
         }
@@ -235,7 +237,7 @@ const DetailPage = () => {
         <div className="detail-page slide-up">
             <div className="detail-back-nav">
                 <Link to="/" className="back-btn">
-                    <span>&larr;</span> Volver al Catálogo
+                    <span>&larr;</span> {t('detail.backToCatalog')}
                 </Link>
             </div>
 
@@ -247,7 +249,7 @@ const DetailPage = () => {
                             alt={coin.name}
                             className="detail-main-image"
                         />
-                        {coin.imageUrls && coin.imageUrls.length > 0 && <span className="zoom-hint" style={{ position: 'absolute', bottom: '10px', right: '10px', background: 'rgba(0,0,0,0.6)', padding: '5px 10px', borderRadius: '4px', fontSize: '0.8rem' }}>🔍 Ampliar Foto</span>}
+                        {coin.imageUrls && coin.imageUrls.length > 0 && <span className="zoom-hint" style={{ position: 'absolute', bottom: '10px', right: '10px', background: 'rgba(0,0,0,0.6)', padding: '5px 10px', borderRadius: '4px', fontSize: '0.8rem' }}>{t('detail.zoomPhoto')}</span>}
                     </div>
 
                     {images.length > 1 && (
@@ -285,16 +287,16 @@ const DetailPage = () => {
                         </div>
                         {coin.tokenId ? (
                             <div className="nft-badge" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                <span>⭐ NFT Registrado On-Chain (ID: #{coin.tokenId})</span>
+                                <span>{t('detail.nftRegistered').replace('{{tokenId}}', coin.tokenId)}</span>
                                 {!auction && user && coin.owner && (user.walletAddress === coin.owner.walletAddress || user.id === coin.owner.id) && (
                                     <div className="auction-form" style={{ marginTop: '1rem', background: '#2C2C2E', padding: '15px', borderRadius: '8px' }}>
-                                        <h4 style={{ margin: '0 0 10px 0', color: '#FFD700' }}>Poner en Subasta</h4>
+                                        <h4 style={{ margin: '0 0 10px 0', color: '#FFD700' }}>{t('detail.putOnAuction')}</h4>
                                         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                                            <input type="number" step="0.01" value={startingPrice} onChange={e => setStartingPrice(e.target.value)} placeholder="Salida (ETH)" style={{ width: '120px', padding: '5px' }} />
-                                            <input type="number" value={durationDays} onChange={e => setDurationDays(e.target.value)} placeholder="0 Días" style={{ width: '60px', padding: '5px' }} />
-                                            <input type="number" value={durationHours} onChange={e => setDurationHours(e.target.value)} placeholder="24 Horas" style={{ width: '70px', padding: '5px' }} />
+                                            <input type="number" step="0.01" value={startingPrice} onChange={e => setStartingPrice(e.target.value)} placeholder={t('detail.startPrice')} style={{ width: '120px', padding: '5px' }} />
+                                            <input type="number" value={durationDays} onChange={e => setDurationDays(e.target.value)} placeholder={`0 ${t('detail.days')}`} style={{ width: '60px', padding: '5px' }} />
+                                            <input type="number" value={durationHours} onChange={e => setDurationHours(e.target.value)} placeholder={`24 ${t('detail.hours')}`} style={{ width: '70px', padding: '5px' }} />
                                             <button onClick={handleCreateAuction} disabled={isActionLoading} style={{ background: '#FFD700', border: 'none', padding: '6px 12px', fontWeight: 'bold', borderRadius: '4px', cursor: 'pointer' }}>
-                                                {isActionLoading ? '...' : 'Lanzar Subasta'}
+                                                {isActionLoading ? '...' : t('detail.launchAuction')}
                                             </button>
                                         </div>
                                     </div>
@@ -313,7 +315,7 @@ const DetailPage = () => {
                                         opacity: isMinting ? 0.7 : 1, alignSelf: 'flex-start'
                                     }}
                                 >
-                                    {isMinting ? '⚙️ Confirmando Tx...' : '💎 Transformar en NFT'}
+                                    {isMinting ? t('detail.confirmingTx') : t('detail.mintNFT')}
                                 </button>
                             )
                         )}
@@ -323,18 +325,18 @@ const DetailPage = () => {
                         <div className="auction-active-panel" style={{ background: 'linear-gradient(135deg, #1A1A1D, #2C2C2E)', border: '1px solid #FFD700', borderRadius: '12px', padding: '20px', marginTop: '20px', marginBottom: '20px' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,215,0,0.3)', paddingBottom: '10px', marginBottom: '15px' }}>
                                 <h3 style={{ margin: 0, color: '#FFD700' }}>
-                                    {auction.active ? '⚡ Subasta Activa' : '🏁 Subasta Terminada'}
+                                    {auction.active ? t('detail.auctionActive') : t('detail.auctionFinished')}
                                 </h3>
-                                <span>Vence: {new Date(auction.endTime).toLocaleString()}</span>
+                                <span>{t('detail.expires')} {new Date(auction.endTime).toLocaleString()}</span>
                             </div>
                             
                             <div style={{ display: 'flex', gap: '30px', marginBottom: '20px' }}>
                                 <div>
-                                    <p style={{ margin: '0 0 5px 0', fontSize: '0.9rem', color: '#AAA' }}>Precio Inicial</p>
+                                    <p style={{ margin: '0 0 5px 0', fontSize: '0.9rem', color: '#AAA' }}>{t('detail.initialPrice')}</p>
                                     <p style={{ margin: 0, fontSize: '1.2rem', fontWeight: 'bold' }}>{auction.startingPrice} ETH</p>
                                 </div>
                                 <div>
-                                    <p style={{ margin: '0 0 5px 0', fontSize: '0.9rem', color: '#AAA' }}>Puja Actual Ganadora</p>
+                                    <p style={{ margin: '0 0 5px 0', fontSize: '0.9rem', color: '#AAA' }}>{t('detail.currentWinningBid')}</p>
                                     <p style={{ margin: 0, fontSize: '1.5rem', fontWeight: 'bold', color: '#FFD700' }}>{auction.currentBid} ETH</p>
                                 </div>
                             </div>
@@ -345,18 +347,18 @@ const DetailPage = () => {
                                         type="number" step="0.01" 
                                         value={proxyBid} 
                                         onChange={e => setProxyBid(e.target.value)} 
-                                        placeholder="Tu Límite Máximo (ETH)"
+                                        placeholder={t('detail.yourMaxLimit')}
                                         style={{ flex: 1, padding: '10px', borderRadius: '6px', border: '1px solid #555', background: '#111', color: '#FFF' }}
                                     />
                                     <button onClick={handlePlaceBid} disabled={isActionLoading} style={{ background: '#FFD700', border: 'none', padding: '10px 20px', fontWeight: 'bold', borderRadius: '6px', cursor: 'pointer', color: '#000' }}>
-                                        {isActionLoading ? 'Procesando...' : 'Colocar Puja Proxy'}
+                                        {isActionLoading ? t('detail.processing') : t('detail.placeProxyBid')}
                                     </button>
                                 </div>
                             )}
 
                             {auction.active && (
                                 <button onClick={handleSettleAuction} disabled={isActionLoading} style={{ width: '100%', marginTop: '15px', background: '#E74C3C', border: 'none', padding: '10px', borderRadius: '6px', fontWeight: 'bold', color: '#FFF', cursor: 'pointer' }}>
-                                    Liquidar Subasta (Forzado en Dev)
+                                    {t('detail.settleAuction')}
                                 </button>
                             )}
                         </div>
@@ -365,32 +367,32 @@ const DetailPage = () => {
                     <p className="detail-country">{coin.country}</p>
 
                     <div className="detail-description">
-                        <h3>Historia y Detalles</h3>
-                        <p>{coin.description || 'No hay descripción histórica disponible para esta pieza.'}</p>
+                        <h3>{t('detail.history')}</h3>
+                        <p>{coin.description || t('detail.noDescription')}</p>
                     </div>
 
                     <div className="detail-specs">
-                        <h3>Especificaciones Técnicas</h3>
+                        <h3>{t('detail.specs')}</h3>
                         <ul className="specs-list">
                             <li>
-                                <span className="spec-label">Material</span>
+                                <span className="spec-label">{t('detail.material')}</span>
                                 <span className="spec-value">{coin.material}</span>
                             </li>
                             <li>
-                                <span className="spec-label">Año de Emisión</span>
+                                <span className="spec-label">{t('detail.year')}</span>
                                 <span className="spec-value">{coin.year}</span>
                             </li>
                             <li>
-                                <span className="spec-label">País de Origen</span>
+                                <span className="spec-label">{t('detail.country')}</span>
                                 <span className="spec-value">{coin.country}</span>
                             </li>
                             <li>
-                                <span className="spec-label">Grado de Conservación</span>
+                                <span className="spec-label">{t('detail.grade')}</span>
                                 <span className="spec-value">{coin.grade}</span>
                             </li>
                             {user && coin.owner && (
                                 <li>
-                                    <span className="spec-label">Dueño / Custodio</span>
+                                    <span className="spec-label">{t('detail.owner')}</span>
                                     <span className="spec-value" style={{ color: '#FFD700', fontWeight: 'bold' }}>
                                         {coin.owner.walletAddress ? `${coin.owner.walletAddress.slice(0, 6)}...${coin.owner.walletAddress.slice(-4)}` : coin.owner.email}
                                     </span>
@@ -425,7 +427,7 @@ const DetailPage = () => {
                                 onMouseOver={(e) => e.target.style.background = 'rgba(255,255,255,0.2)'}
                                 onMouseOut={(e) => e.target.style.background = 'rgba(255,255,255,0.1)'}
                             >
-                                &larr; Anterior
+                                {t('detail.previous')}
                             </button>
                             <button
                                 onClick={(e) => { e.stopPropagation(); setCurrentImageIndex((prev) => (prev + 1) % images.length); }}
@@ -433,7 +435,7 @@ const DetailPage = () => {
                                 onMouseOver={(e) => e.target.style.background = 'rgba(255,255,255,0.2)'}
                                 onMouseOut={(e) => e.target.style.background = 'rgba(255,255,255,0.1)'}
                             >
-                                Siguiente &rarr;
+                                {t('detail.next')}
                             </button>
                         </div>
                     )}

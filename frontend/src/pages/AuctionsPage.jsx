@@ -2,9 +2,11 @@ import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { apiService } from '../services/apiService';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import '../styles/AuctionsPage.css';
 
 const AuctionsPage = () => {
+    const { t } = useTranslation();
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
     const [bids, setBids] = useState([]);
@@ -43,22 +45,22 @@ const AuctionsPage = () => {
         return (
             <div className="auctions-container">
                 <div className="spinner"></div>
-                <p>Cargando tus subastas proxy...</p>
+                <p>{t('auctions.loading')}</p>
             </div>
         );
     }
 
     return (
         <div className="auctions-container slide-up">
-            <h2>Mis Subastas Activas (Proxy Bidding)</h2>
+            <h2>{t('auctions.title')}</h2>
             <p style={{ color: '#AAA', marginBottom: '30px' }}>
-                Monitoreo en tiempo real de tus ofertas. El algoritmo on-chain se encarga de luchar por ti hasta alcanzar tu límite máximo.
+                {t('auctions.subtitle')}
             </p>
 
             {bids.length === 0 ? (
                 <div className="no-bids">
-                    <p>No tienes ofertas proxy vigentes.</p>
-                    <Link to="/" className="search-coins-btn">Explorar Catálogo</Link>
+                    <p>{t('auctions.noBids')}</p>
+                    <Link to="/" className="search-coins-btn">{t('auctions.exploreCatalog')}</Link>
                 </div>
             ) : (
                 <div className="bids-grid">
@@ -68,7 +70,7 @@ const AuctionsPage = () => {
                         
                         const statusColor = isWinning ? '#27AE60' : '#E74C3C';
                         const statusIcon = isWinning ? '🏆' : '💀';
-                        const statusText = isWinning ? 'Estás Ganando' : 'Superado';
+                        const statusText = isWinning ? t('auctions.statusWinning') : t('auctions.statusOutbid');
                         const expired = new Date() > new Date(bid.auction.endTime);
 
                         return (
@@ -76,28 +78,28 @@ const AuctionsPage = () => {
                                 <div className="bid-header">
                                     <h3>{bid.auction.coin.name}</h3>
                                     <span className="auction-status" style={{ background: expired ? '#555' : statusColor }}>
-                                        {expired ? '🏁 Terminada' : `${statusIcon} ${statusText}`}
+                                        {expired ? t('auctions.statusFinished') : `${statusIcon} ${statusText}`}
                                     </span>
                                 </div>
                                 
                                 <div className="bid-body">
                                     <div className="bid-stat">
-                                        <label>Costo Actual (Blockchain)</label>
+                                        <label>{t('auctions.currentCost')}</label>
                                         <p className="actual-cost">{bid.auction.currentBid} ETH</p>
                                     </div>
                                     <div className="bid-stat proxy">
-                                        <label>Tu Presupuesto Máximo (Bloqueado)</label>
+                                        <label>{t('auctions.maxBudget')}</label>
                                         <p>{bid.maxProxyAmount} ETH</p>
                                     </div>
                                     <div className="bid-stat time">
-                                        <label>Fecha de Expiración</label>
+                                        <label>{t('auctions.expirationDate')}</label>
                                         <p>{new Date(bid.auction.endTime).toLocaleString()}</p>
                                     </div>
                                 </div>
 
                                 <div className="bid-actions">
                                     <Link to={`/coin/${bid.auction.coin.id}`} className="view-auction-btn">
-                                        Ver Detalles y Ajustar Puja
+                                        {t('auctions.viewDetails')}
                                     </Link>
                                 </div>
                             </div>
