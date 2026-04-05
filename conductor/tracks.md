@@ -19,5 +19,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 - [x] **Track: Creación y Minteo de NFTs (ERC-721) con Ganache**
   *Link: [./tracks/nft-minting_20260402/](./tracks/nft-minting_20260402/)*
 
-- [ ] **Track: Sistema de Subastas (Proxy Bidding) descentralizado**
+- [x] **Track: Sistema de Subastas (Proxy Bidding) descentralizado**
   *Link: [./tracks/auction-proxy-bidding_20260403/](./tracks/auction-proxy-bidding_20260403/)*
