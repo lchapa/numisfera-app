@@ -22,9 +22,9 @@ Transformar el código local monolítico a una Arquitectura de Microservicios or
 - [x] **Task:** Crear `docker-compose.yml` maestro para orquestar base de datos simulada y ambas terminales de manera sincrónica y probarlo en local ("Validar Ready").
 
 ### Fase 2: Configuración de Entornos Específicos para Cloud
-- [ ] **Task:** Agregar dependencia Google Cloud Storage (`google-cloud-storage`) y MySQL en el `pom.xml`.
-- [ ] **Task:** Construir Archivo de Propiedades `application-prod.properties` para enlazar variables dinámicas hacia Cloud SQL.
-- [ ] **Task:** Adaptar la clase lógica de subida de imágenes (File Services) introduciendo condicionales "Si el profile es Prod = GCS; Si es Dev = FS local".
+- [x] **Task:** Agregar dependencia Google Cloud Storage (`google-cloud-storage`) y MySQL en el `pom.xml`.
+- [x] **Task:** Construir Archivo de Propiedades `application-prod.properties` para enlazar variables dinámicas hacia Cloud SQL.
+- [x] **Task:** Adaptar la clase lógica de subida de imágenes (File Services) introduciendo condicionales "Si el profile es Prod = GCS; Si es Dev = FS local".
 
 ### Fase 3: Hardhat Web3 - Despliegue en Sepolia
 - [ ] **Task:** Obtener y parametrizar credenciales Alchemy/Infura para testnet y variables secretas en `hardhat.config.js`.
