@@ -27,8 +27,8 @@ Transformar el código local monolítico a una Arquitectura de Microservicios or
 - [x] **Task:** Adaptar la clase lógica de subida de imágenes (File Services) introduciendo condicionales "Si el profile es Prod = GCS; Si es Dev = FS local".
 
 ### Fase 3: Hardhat Web3 - Despliegue en Sepolia
-- [ ] **Task:** Obtener y parametrizar credenciales Alchemy/Infura para testnet y variables secretas en `hardhat.config.js`.
-- [ ] **Task:** Desplegar el contrato (Dry-Run local en modo Sepolia). Capturar Addresses e inyectarlo en `.env.production` (Variables Prod) de React.
+- [x] **Task:** Obtener y parametrizar credenciales Alchemy/Infura para testnet y variables secretas en `hardhat.config.js`.
+- [x] **Task:** Desplegar el contrato (Dry-Run local en modo Sepolia). Capturar Addresses e inyectarlo en `.env.production` (Variables Prod) de React.
 
 ### Fase 4: Cloud Infrastructure (Terraform scripts)
 - [ ] **Task:** Creación del bosquejo inicial IaC (Infrastructure as Code) definiendo el Bucket Público, la base de datos Cloud SQL y los servicios de Cloud Run. (Módulo Analítico, enseñando la estructura a desplegar).
