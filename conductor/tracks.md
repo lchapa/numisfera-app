@@ -25,5 +25,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 - [x] **Track: Internacionalización (i18n) del Sistema (Inglés US y Español LATAM)**
   *Link: [./tracks/i18n_20260405/](./tracks/i18n_20260405/)*
 
-- [ ] **Track: Readiness y Despliegue en GCP (Cloud Run, Cloud SQL, Terraform, CI/CD)**
-  *Link: (Pendiente de crear plan)*
+- [x] **Track: Readiness y Despliegue en GCP (Cloud Run, Cloud SQL, Terraform, CI/CD)**
+  *Link: [./tracks/gcp-deployment_20260406/](./tracks/gcp-deployment_20260406/)*
