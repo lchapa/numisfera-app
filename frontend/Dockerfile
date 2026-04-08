@@ -16,6 +16,7 @@ RUN echo 'server { \
     listen       8080; \
     server_name  localhost; \
     add_header Content-Security-Policy "default-src * \''unsafe-inline\'' \''unsafe-eval\'' data: blob:;" always; \
+    add_header Content-Security-Policy "script-src 'self'; connect-src 'self' https://*.walletconnect.com https://*.infura.io;" always; \
     location / { \
         root   /usr/share/nginx/html; \
         index  index.html index.htm; \
