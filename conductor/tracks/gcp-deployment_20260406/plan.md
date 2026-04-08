@@ -34,5 +34,5 @@ Transformar el código local monolítico a una Arquitectura de Microservicios or
 - [x] **Task:** Creación del bosquejo inicial IaC (Infrastructure as Code) definiendo el Bucket Público, la base de datos Cloud SQL y los servicios de Cloud Run. (Módulo Analítico, enseñando la estructura a desplegar).
 
 ### Fase 5: GitHub Actions CI/CD y Traspaso
-- [ ] **Task:** Programar y comitear el Pipeline (`.github/workflows/deploy.yml`) y enseñar al usuario cómo vincular sus Secretos de Google Service Accounts a Github.
-- [ ] **Task:** Disparo del sistema automatizado, Go Live Público.
+- [x] **Task:** Programar y comitear el Pipeline (`.github/workflows/deploy.yml`) y enseñar al usuario cómo vincular sus Secretos de Google Service Accounts a Github.
+- [x] **Task:** Disparo del sistema automatizado, Go Live Público.

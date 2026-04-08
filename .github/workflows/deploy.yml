@@ -1,0 +1,83 @@
+name: Build and Deploy to Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  REGION: us-central1
+  BACKEND_SERVICE: numisfera-backend-api
+  FRONTEND_SERVICE: numisfera-app
+  GAR_LOCATION: us-central1-docker.pkg.dev
+  REPOSITORY: numisfera-repo
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    # Add permissions for Workload Identity Federation
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    # Autenticación con Google Cloud
+    - name: Google Auth
+      id: auth
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+    # Configurar Docker para subir a Google Artifact Registry
+    - name: Configure Docker for GCP
+      run: |-
+        gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
+
+    # ==========================
+    # 1. BUILD Y PUSH DE BACKEND
+    # ==========================
+    - name: Build Backend Docker Image
+      run: |-
+        docker build -t ${{ env.GAR_LOCATION }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/backend:${{ github.sha }} ./backend
+        docker push ${{ env.GAR_LOCATION }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/backend:${{ github.sha }}
+
+    - name: Deploy Backend to Cloud Run
+      id: deploy-backend
+      uses: google-github-actions/deploy-cloudrun@v2
+      with:
+        service: ${{ env.BACKEND_SERVICE }}
+        region: ${{ env.REGION }}
+        image: ${{ env.GAR_LOCATION }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/backend:${{ github.sha }}
+        env_vars: |-
+          SPRING_PROFILES_ACTIVE=prod
+          JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+
+    # ===========================
+    # 2. BUILD Y PUSH DE FRONTEND
+    # ===========================
+    - name: Build Frontend Docker Image
+      run: |-
+        docker build -t ${{ env.GAR_LOCATION }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/frontend:${{ github.sha }} ./frontend
+        docker push ${{ env.GAR_LOCATION }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/frontend:${{ github.sha }}
+
+    - name: Deploy Frontend to Cloud Run
+      id: deploy-frontend
+      uses: google-github-actions/deploy-cloudrun@v2
+      with:
+        service: ${{ env.FRONTEND_SERVICE }}
+        region: ${{ env.REGION }}
+        image: ${{ env.GAR_LOCATION }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/frontend:${{ github.sha }}
+
+    # ===========================
+    # 3. VERIFICACION Y URLS
+    # ===========================
+    - name: Show output URLs
+      run: |
+        echo "Backend operando en: ${{ steps.deploy-backend.outputs.url }}"
+        echo "Frontend operando en: ${{ steps.deploy-frontend.outputs.url }}"
