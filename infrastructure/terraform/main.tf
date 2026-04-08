@@ -69,7 +69,7 @@ resource "google_cloud_run_v2_service" "backend" {
 
   template {
     containers {
-      image = "us-central1-docker.pkg.dev/${var.project_id}/numisfera-repo/backend:latest" # Construido vía CI/CD luego
+      image = "us-docker.pkg.dev/cloudrun/container/hello" # Placeholder temporal para crear el servicio
       
       env {
         name  = "SPRING_PROFILES_ACTIVE"
@@ -97,6 +97,10 @@ resource "google_cloud_run_v2_service" "backend" {
       }
     }
   }
+
+  lifecycle {
+    ignore_changes = [template[0].containers[0].image]
+  }
 }
 
 # 4. Cloud Run - Frontend Server (React Vite + Nginx)
@@ -107,8 +111,12 @@ resource "google_cloud_run_v2_service" "frontend" {
 
   template {
     containers {
-      image = "us-central1-docker.pkg.dev/${var.project_id}/numisfera-repo/frontend:latest"
+      image = "us-docker.pkg.dev/cloudrun/container/hello" # Placeholder temporal para crear el servicio
     }
+  }
+
+  lifecycle {
+    ignore_changes = [template[0].containers[0].image]
   }
 }
 
