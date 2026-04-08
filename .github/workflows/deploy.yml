@@ -53,10 +53,6 @@ jobs:
         service: ${{ env.BACKEND_SERVICE }}
         region: ${{ env.REGION }}
         image: ${{ env.GAR_LOCATION }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/backend:${{ github.sha }}
-        env_vars: |-
-          SPRING_PROFILES_ACTIVE=prod
-          JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
-          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
 
     # ===========================
     # 2. BUILD Y PUSH DE FRONTEND
