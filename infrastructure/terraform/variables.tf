@@ -1,7 +1,6 @@
 variable "project_id" {
   description = "El ID del Proyecto en Google Cloud Platform"
   type        = string
-  default     = "numisfera-mx-prod-1234" # Cambia esto por tu Project ID real
 }
 
 variable "region" {
