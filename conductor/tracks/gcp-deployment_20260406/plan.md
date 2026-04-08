@@ -31,7 +31,7 @@ Transformar el código local monolítico a una Arquitectura de Microservicios or
 - [x] **Task:** Desplegar el contrato (Dry-Run local en modo Sepolia). Capturar Addresses e inyectarlo en `.env.production` (Variables Prod) de React.
 
 ### Fase 4: Cloud Infrastructure (Terraform scripts)
-- [ ] **Task:** Creación del bosquejo inicial IaC (Infrastructure as Code) definiendo el Bucket Público, la base de datos Cloud SQL y los servicios de Cloud Run. (Módulo Analítico, enseñando la estructura a desplegar).
+- [x] **Task:** Creación del bosquejo inicial IaC (Infrastructure as Code) definiendo el Bucket Público, la base de datos Cloud SQL y los servicios de Cloud Run. (Módulo Analítico, enseñando la estructura a desplegar).
 
 ### Fase 5: GitHub Actions CI/CD y Traspaso
 - [ ] **Task:** Programar y comitear el Pipeline (`.github/workflows/deploy.yml`) y enseñar al usuario cómo vincular sus Secretos de Google Service Accounts a Github.
