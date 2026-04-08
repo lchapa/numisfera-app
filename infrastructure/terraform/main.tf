@@ -12,6 +12,14 @@ provider "google" {
   region  = var.region
 }
 
+# 0. Artifact Registry - Almacén de Contenedores Docker
+resource "google_artifact_registry_repository" "docker_repo" {
+  location      = var.region
+  repository_id = "numisfera-repo"
+  format        = "DOCKER"
+  description   = "Repositorio web de las imágenes Docker de Numisfera"
+}
+
 # 1. Cloud Storage - Bucket para almacenar las imagenes de las monedas
 resource "google_storage_bucket" "numisfera_images" {
   name          = "${var.project_id}-images"
