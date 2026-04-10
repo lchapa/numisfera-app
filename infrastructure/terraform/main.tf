@@ -37,6 +37,16 @@ resource "google_storage_bucket_iam_binding" "public_images" {
   ]
 }
 
+data "google_project" "project" {}
+
+resource "google_storage_bucket_iam_binding" "backend_storage_admin" {
+  bucket = google_storage_bucket.numisfera_images.name
+  role   = "roles/storage.objectAdmin"
+  members = [
+    "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com",
+  ]
+}
+
 # 2. Cloud SQL - Base de Datos MySQL
 resource "google_sql_database_instance" "numisfera_db_instance" {
   name             = "numisfera-sql-instance"
