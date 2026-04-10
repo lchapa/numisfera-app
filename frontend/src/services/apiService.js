@@ -1,5 +1,6 @@
-const API_BASE_URL = 'http://localhost:8080/api/coins';
-const AUTH_URL = 'http://localhost:8080/api/auth';
+const BASE_API = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
+const API_BASE_URL = `${BASE_API}/coins`;
+const AUTH_URL = `${BASE_API}/auth`;
 
 const getHeaders = (isFormData = false) => {
     const token = localStorage.getItem('token');
@@ -185,7 +186,7 @@ export const apiService = {
 
     // ---- AUCTION ENDPOINTS ----
     createAuction: async (coinId, startingPrice, durationSeconds) => {
-        const res = await fetch(`http://localhost:8080/api/auctions/${coinId}`, {
+        const res = await fetch(`${BASE_API}/auctions/${coinId}`, {
             method: 'POST',
             headers: getHeaders(),
             body: JSON.stringify({ startingPrice, durationSeconds })
@@ -195,7 +196,7 @@ export const apiService = {
     },
 
     getAuctionDetails: async (coinId) => {
-        const res = await fetch(`http://localhost:8080/api/auctions/${coinId}`, {
+        const res = await fetch(`${BASE_API}/auctions/${coinId}`, {
             headers: getHeaders()
         });
         if (res.status === 404) return null;
@@ -204,7 +205,7 @@ export const apiService = {
     },
 
     recordBid: async (auctionId, proxyAmount, currentBid, highestBidderWallet) => {
-        const res = await fetch(`http://localhost:8080/api/auctions/${auctionId}/bid`, {
+        const res = await fetch(`${BASE_API}/auctions/${auctionId}/bid`, {
             method: 'POST',
             headers: getHeaders(),
             body: JSON.stringify({ proxyAmount, currentBid, highestBidderWallet })
@@ -214,7 +215,7 @@ export const apiService = {
     },
 
     settleAuctionLocal: async (auctionId) => {
-        const res = await fetch(`http://localhost:8080/api/auctions/${auctionId}/settle`, {
+        const res = await fetch(`${BASE_API}/auctions/${auctionId}/settle`, {
             method: 'PUT',
             headers: getHeaders()
         });
@@ -222,7 +223,7 @@ export const apiService = {
     },
 
     getUserBids: async () => {
-        const res = await fetch(`http://localhost:8080/api/auctions/user`, {
+        const res = await fetch(`${BASE_API}/auctions/user`, {
             headers: getHeaders()
         });
         if (!res.ok) throw new Error(await res.text());

@@ -87,7 +87,7 @@ const DetailPage = () => {
     }
 
     const images = coin.imageUrls && coin.imageUrls.length > 0
-        ? coin.imageUrls.map(url => `http://localhost:8080${url}`)
+        ? coin.imageUrls.map(url => url.startsWith('http') ? url : `${(import.meta.env.VITE_API_URL || 'http://localhost:8080/api').replace('/api', '')}${url}`)
         : ['https://via.placeholder.com/400'];
 
     const handleMintNFT = async () => {

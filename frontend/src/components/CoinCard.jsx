@@ -10,7 +10,7 @@ const CoinCard = ({ coin }) => {
         <div className="coin-card group">
             <div className="coin-card-image-wrapper">
                 <img
-                    src={(coin.imageUrls && coin.imageUrls.length > 0) ? `http://localhost:8080${coin.imageUrls[0]}` : 'https://via.placeholder.com/150'}
+                    src={(coin.imageUrls && coin.imageUrls.length > 0) ? (coin.imageUrls[0].startsWith('http') ? coin.imageUrls[0] : `${(import.meta.env.VITE_API_URL || 'http://localhost:8080/api').replace('/api', '')}${coin.imageUrls[0]}`) : 'https://via.placeholder.com/150'}
                     alt={coin.name}
                     className="coin-card-image"
                 />

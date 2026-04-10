@@ -152,7 +152,7 @@ const CoinForm = ({ initialData, onSubmit, onCancel, loading }) => {
                             <p>Fotos actuales:</p>
                             <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
                                 {existingImages.map((url, idx) => (
-                                    <img key={idx} src={`http://localhost:8080${url}`} alt="Preview" style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '4px' }} />
+                                    <img key={idx} src={url.startsWith('http') ? url : `${(import.meta.env.VITE_API_URL || 'http://localhost:8080/api').replace('/api', '')}${url}`} alt="Preview" style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '4px' }} />
                                 ))}
                             </div>
                         </div>
