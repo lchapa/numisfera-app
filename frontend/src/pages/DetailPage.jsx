@@ -48,7 +48,7 @@ const DetailPage = () => {
             }
         };
 
-        fetchData();
+        fetchCoinDetails();
     }, [id]);
 
     useEffect(() => {
