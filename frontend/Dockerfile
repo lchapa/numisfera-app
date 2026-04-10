@@ -13,7 +13,7 @@ COPY --from=build /app/dist /usr/share/nginx/html
 RUN echo 'server { \
     listen       8080; \
     server_name  localhost; \
-    add_header Content-Security-Policy "default-src * '\''unsafe-inline'\'' '\''unsafe-eval'\'' data: blob:;" always; \
+    add_header Content-Security-Policy "default-src * '\''unsafe-inline'\'' '\''unsafe-eval'\'' data: blob:; script-src * '\''unsafe-inline'\'' '\''unsafe-eval'\'' data: blob:; style-src * '\''unsafe-inline'\'';" always; \
     location / { \
         root   /usr/share/nginx/html; \
         index  index.html index.htm; \
