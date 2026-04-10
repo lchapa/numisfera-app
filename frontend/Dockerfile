@@ -10,11 +10,10 @@ RUN npm run build
 FROM nginx:alpine
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Add a custom nginx.conf to support React Router (SPA)
-RUN echo "server { \
+RUN echo 'server { \
     listen       8080; \
     server_name  localhost; \
-    add_header Content-Security-Policy \"default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;\" always; \
+    add_header Content-Security-Policy "default-src * '\''unsafe-inline'\'' '\''unsafe-eval'\'' data: blob:;" always; \
     location / { \
         root   /usr/share/nginx/html; \
         index  index.html index.htm; \
