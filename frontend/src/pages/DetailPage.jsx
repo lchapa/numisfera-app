@@ -356,9 +356,9 @@ const DetailPage = () => {
                                 </div>
                             )}
 
-                            {auction.active && (
+                            {auction.active && import.meta.env.DEV && (
                                 <button onClick={handleSettleAuction} disabled={isActionLoading} style={{ width: '100%', marginTop: '15px', background: '#E74C3C', border: 'none', padding: '10px', borderRadius: '6px', fontWeight: 'bold', color: '#FFF', cursor: 'pointer' }}>
-                                    {t('detail.settleAuction')}
+                                    {t('detail.settleAuction')} (DEV ONLY)
                                 </button>
                             )}
                         </div>
