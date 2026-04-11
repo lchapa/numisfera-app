@@ -327,7 +327,7 @@ const DetailPage = () => {
                                 <h3 style={{ margin: 0, color: '#FFD700' }}>
                                     {auction.active ? t('detail.auctionActive') : t('detail.auctionFinished')}
                                 </h3>
-                                <span>{t('detail.expires')} {new Date(auction.endTime).toLocaleString()}</span>
+                                <span>{t('detail.expires')} {new Date(!import.meta.env.DEV && !auction.endTime.endsWith('Z') ? auction.endTime + 'Z' : auction.endTime).toLocaleString()}</span>
                             </div>
                             
                             <div style={{ display: 'flex', gap: '30px', marginBottom: '20px' }}>
