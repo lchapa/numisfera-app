@@ -24,6 +24,7 @@ const DetailPage = () => {
     const [startingPrice, setStartingPrice] = useState('0.1');
     const [durationDays, setDurationDays] = useState('0');
     const [durationHours, setDurationHours] = useState('24');
+    const [durationMinutes, setDurationMinutes] = useState('0');
     const [proxyBid, setProxyBid] = useState('');
 
     const openLightbox = (index) => {
@@ -154,11 +155,12 @@ const DetailPage = () => {
 
             // 2. Create Auction on-chain
             const priceInWei = ethers.parseEther(startingPrice);
-            const totalSeconds = (parseInt(durationDays || '0') * 24 * 60 * 60) + (parseInt(durationHours || '0') * 60 * 60);
+            const totalSeconds = (parseInt(durationDays || '0') * 24 * 60 * 60) + (parseInt(durationHours || '0') * 60 * 60) + (import.meta.env.DEV ? parseInt(durationMinutes || '0') * 60 : 0);
             
-            if (totalSeconds < 3600) {
+            const minSeconds = import.meta.env.DEV ? 60 : 3600;
+            if (totalSeconds < minSeconds) {
                 setIsActionLoading(false);
-                return alert(t('detail.errorTimeInvalid'));
+                return alert(import.meta.env.DEV ? "El tiempo mínimo en DEV es 1 minuto." : t('detail.errorTimeInvalid'));
             }
             
             const tx = await auctionContract.createAuction(coin.tokenId, priceInWei, totalSeconds);
@@ -295,11 +297,14 @@ const DetailPage = () => {
                                 {!auction && user && coin.owner && (user.walletAddress === coin.owner.walletAddress || user.id === coin.owner.id) && (
                                     <div className="auction-form" style={{ marginTop: '1rem', background: '#2C2C2E', padding: '15px', borderRadius: '8px' }}>
                                         <h4 style={{ margin: '0 0 10px 0', color: '#FFD700' }}>{t('detail.putOnAuction')}</h4>
-                                        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                        <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
                                             <input type="number" step="0.01" value={startingPrice} onChange={e => setStartingPrice(e.target.value)} placeholder={t('detail.startPrice')} style={{ width: '120px', padding: '5px' }} />
                                             <input type="number" value={durationDays} onChange={e => setDurationDays(e.target.value)} placeholder={`0 ${t('detail.days')}`} style={{ width: '60px', padding: '5px' }} />
                                             <input type="number" value={durationHours} onChange={e => setDurationHours(e.target.value)} placeholder={`24 ${t('detail.hours')}`} style={{ width: '70px', padding: '5px' }} />
-                                            <button onClick={handleCreateAuction} disabled={isActionLoading} style={{ background: '#FFD700', border: 'none', padding: '6px 12px', fontWeight: 'bold', borderRadius: '4px', cursor: 'pointer' }}>
+                                            {import.meta.env.DEV && (
+                                                <input type="number" value={durationMinutes} onChange={e => setDurationMinutes(e.target.value)} placeholder={`0 min`} style={{ width: '60px', padding: '5px' }} title="Solo visible en Desarrollo" />
+                                            )}
+                                            <button onClick={handleCreateAuction} disabled={isActionLoading} style={{ background: '#FFD700', border: 'none', padding: '6px 12px', fontWeight: 'bold', borderRadius: '4px', cursor: 'pointer', marginTop: '5px' }}>
                                                 {isActionLoading ? '...' : t('detail.launchAuction')}
                                             </button>
                                         </div>
