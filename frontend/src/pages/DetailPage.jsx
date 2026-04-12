@@ -90,6 +90,10 @@ const DetailPage = () => {
         ? coin.imageUrls.map(url => url.startsWith('http') ? url : `${(import.meta.env.VITE_API_URL || 'http://localhost:8080/api').replace('/api', '')}${url}`)
         : ['https://via.placeholder.com/400'];
 
+    const isOwner = user && coin && coin.owner && (user.walletAddress === coin.owner.walletAddress || user.id === coin.owner.id);
+    const hasWinner = auction && auction.highestBidderWallet && auction.highestBidderWallet !== '0x0000000000000000000000000000000000000000';
+    const isExpired = auction && new Date() > new Date((auction.endTime || '').endsWith('Z') ? auction.endTime : auction.endTime + 'Z');
+
     const handleMintNFT = async () => {
         if (!window.ethereum) {
             alert('Por favor instala MetaMask u otra Web3 wallet.');
@@ -327,7 +331,7 @@ const DetailPage = () => {
                                 <h3 style={{ margin: 0, color: '#FFD700' }}>
                                     {auction.active ? t('detail.auctionActive') : t('detail.auctionFinished')}
                                 </h3>
-                                <span>{t('detail.expires')} {new Date(!import.meta.env.DEV && !auction.endTime.endsWith('Z') ? auction.endTime + 'Z' : auction.endTime).toLocaleString()}</span>
+                                <span>{t('detail.expires')} {new Date((auction.endTime || '').endsWith('Z') ? auction.endTime : auction.endTime + 'Z').toLocaleString()}</span>
                             </div>
                             
                             <div style={{ display: 'flex', gap: '30px', marginBottom: '20px' }}>
@@ -356,9 +360,14 @@ const DetailPage = () => {
                                 </div>
                             )}
 
-                            {auction.active && import.meta.env.DEV && (
+                            {auction.active && isExpired && isOwner && hasWinner && (
                                 <button onClick={handleSettleAuction} disabled={isActionLoading} style={{ width: '100%', marginTop: '15px', background: '#E74C3C', border: 'none', padding: '10px', borderRadius: '6px', fontWeight: 'bold', color: '#FFF', cursor: 'pointer' }}>
-                                    {t('detail.settleAuction')} (DEV ONLY)
+                                    {t('detail.settleAuction')}
+                                </button>
+                            )}
+                            {auction.active && isExpired && isOwner && !hasWinner && (
+                                <button onClick={handleSettleAuction} disabled={isActionLoading} style={{ width: '100%', marginTop: '15px', background: '#888', border: 'none', padding: '10px', borderRadius: '6px', fontWeight: 'bold', color: '#FFF', cursor: 'pointer' }}>
+                                    Cerrar y Recuperar (Sin Ofertas)
                                 </button>
                             )}
                         </div>

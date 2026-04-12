@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,7 +54,7 @@ public class AuctionServiceImpl implements AuctionService {
         auction.setSeller(seller);
         auction.setStartingPrice(startingPrice);
         auction.setCurrentBid(startingPrice);
-        auction.setEndTime(LocalDateTime.now().plusSeconds(durationSeconds));
+        auction.setEndTime(Instant.now().plusSeconds(durationSeconds));
         auction.setActive(true);
 
         return auctionRepository.save(auction);
@@ -82,7 +82,7 @@ public class AuctionServiceImpl implements AuctionService {
         bid.setAuction(auction);
         bid.setBidder(bidder);
         bid.setMaxProxyAmount(proxyAmount);
-        bid.setBidTime(LocalDateTime.now());
+        bid.setBidTime(Instant.now());
         Bid savedBid = bidRepository.save(bid);
         
         // Update auction state to match blockchain

@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Table(name = "bids")
@@ -34,5 +34,5 @@ public class Bid {
     private BigDecimal maxProxyAmount;
 
     @Column(name = "bid_time", nullable = false)
-    private LocalDateTime bidTime;
+    private Instant bidTime;
 }
