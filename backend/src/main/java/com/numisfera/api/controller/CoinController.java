@@ -206,4 +206,23 @@ public class CoinController {
         coinService.deleteCoin(id);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/wipe-dummies")
+    public ResponseEntity<?> wipeDummies() {
+        try {
+            int count = 0;
+            List<Coin> allCoins = coinService.getAllCoins();
+            for (Coin coin : allCoins) {
+                if (coin.getImageUrls() != null && !coin.getImageUrls().isEmpty() && coin.getImageUrls().get(0).contains("dummy-url")) {
+                    // Limpieza Forzada
+                    coinService.deleteCoin(coin.getId());
+                    count++;
+                }
+            }
+            return ResponseEntity.ok("Monedas falsas eliminadas con éxito: " + count);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al intentar borrar monedas falsas: " + e.getMessage());
+        }
+    }
 }
