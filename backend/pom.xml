@@ -110,6 +110,13 @@
 			<artifactId>mysql-socket-factory-connector-j-8</artifactId>
 			<version>1.16.0</version>
 		</dependency>
+
+		<!-- Logstash Logback Encoder for GCP JSON Logs -->
+		<dependency>
+			<groupId>net.logstash.logback</groupId>
+			<artifactId>logstash-logback-encoder</artifactId>
+			<version>7.4</version>
+		</dependency>
 	</dependencies>
 
 	<build>

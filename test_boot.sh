@@ -1,0 +1,8 @@
+cd backend
+export SPRING_PROFILES_ACTIVE=prod
+export DB_PASSWORD=fake
+export JWT_SECRET_KEY=fakelongsecrethatisverylongforjwt12345678901234567890123456789012345
+export CLOUDSQL_DATABASE=numisfera_db
+export CLOUDSQL_INSTANCE=fake-project:us-central1:numisfera-sql-instance
+export GCP_BUCKET_ID=fake_bucket
+mvn clean package -DskipTests

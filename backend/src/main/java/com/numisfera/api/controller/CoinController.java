@@ -103,6 +103,10 @@ public class CoinController {
             coin.setImageUrls(imageUrls);
 
             Coin savedCoin = coinService.createCoin(coin);
+            
+            org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(CoinController.class);
+            log.info("[CATALOG_COIN_ADDED] New piece added to catalog: coinId={}, name={}, ownerId={}", savedCoin.getId(), savedCoin.getName(), user.getId());
+            
             return ResponseEntity.status(HttpStatus.CREATED).body(savedCoin);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

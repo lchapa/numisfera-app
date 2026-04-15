@@ -39,12 +39,17 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+                org.slf4j.MDC.put("userWallet", username);
             }
         } catch (Exception e) {
             logger.error("Cannot set user authentication: {}", e);
         }
 
-        filterChain.doFilter(request, response);
+        try {
+            filterChain.doFilter(request, response);
+        } finally {
+            org.slf4j.MDC.clear();
+        }
     }
 
     private String parseJwt(HttpServletRequest request) {

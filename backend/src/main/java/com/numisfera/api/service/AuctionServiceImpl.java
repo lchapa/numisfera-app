@@ -16,8 +16,13 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class AuctionServiceImpl implements AuctionService {
+
+    private static final Logger log = LoggerFactory.getLogger(AuctionServiceImpl.class);
 
     private final AuctionRepository auctionRepository;
     private final BidRepository bidRepository;
@@ -57,7 +62,10 @@ public class AuctionServiceImpl implements AuctionService {
         auction.setEndTime(Instant.now().plusSeconds(durationSeconds));
         auction.setActive(true);
 
-        return auctionRepository.save(auction);
+        Auction savedAuction = auctionRepository.save(auction);
+        log.info("[AUCTION_CREATED] New auction created: auctionId={}, coinId={}, startingPrice={}, durationSeconds={}, sellerWallet={}", 
+                savedAuction.getId(), coin.getId(), startingPrice, durationSeconds, seller.getWalletAddress());
+        return savedAuction;
     }
 
     @Override
@@ -90,6 +98,8 @@ public class AuctionServiceImpl implements AuctionService {
         auction.setHighestBidderWallet(highestBidderWallet);
         auctionRepository.save(auction);
 
+        log.info("[BID_PLACED] Bid placed: auctionId={}, bidderWallet={}, proxyAmountETH={}", 
+                auctionId, bidder.getWalletAddress(), proxyAmount);
         return savedBid;
     }
 
@@ -106,9 +116,18 @@ public class AuctionServiceImpl implements AuctionService {
             // Find the winning user by wallet and transfer the off-chain entity property
             userRepository.findByWalletAddress(auction.getHighestBidderWallet()).ifPresent(newOwner -> {
                 Coin coin = auction.getCoin();
+                String originWallet = coin.getOwner() != null ? coin.getOwner().getWalletAddress() : "UNKNOWN";
                 coin.setOwner(newOwner);
                 coinRepository.save(coin);
+                
+                BigDecimal finalAmount = auction.getCurrentBid();
+                BigDecimal commission = finalAmount != null ? finalAmount.multiply(new BigDecimal("0.05")) : BigDecimal.ZERO;
+                log.info("[AUCTION_SETTLED_WIN] Auction settled with winner: auctionId={}, originWallet={}, destWallet={}, amountETH={}, commissionETH={}",
+                        auctionId, originWallet, newOwner.getWalletAddress(), finalAmount, commission);
             });
+        } else {
+            log.info("[AUCTION_SETTLED_EMPTY] Auction ended empty: auctionId={}, ownerWallet={}, reason=\"Sin Pujas - Retorno al Dueño\"",
+                    auctionId, auction.getSeller() != null ? auction.getSeller().getWalletAddress() : "UNKNOWN");
         }
     }
 

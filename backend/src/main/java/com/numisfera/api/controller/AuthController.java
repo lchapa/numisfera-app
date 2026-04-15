@@ -90,12 +90,19 @@ public class AuthController {
         }
 
         // Search for user or register on the fly
-        User user = userRepository.findByWalletAddress(request.getPublicAddress()).orElseGet(() -> {
+        java.util.Optional<User> existingUser = userRepository.findByWalletAddress(request.getPublicAddress());
+        User user;
+        if (existingUser.isPresent()) {
+            user = existingUser.get();
+        } else {
             User newUser = new User();
             newUser.setWalletAddress(request.getPublicAddress());
             newUser.setRole(Role.USER_WALLET); // Auto-assign Metamask role
-            return userRepository.save(newUser);
-        });
+            user = userRepository.save(newUser);
+            
+            org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AuthController.class);
+            log.info("[AUTH_NEW_COLLECTOR] New Web3 collector registered: Wallet={}, ID={}", user.getWalletAddress(), user.getId());
+        }
 
         // We bypass traditional authentication manager because there is no password
         UserDetailsImpl userDetails = UserDetailsImpl.build(user);
